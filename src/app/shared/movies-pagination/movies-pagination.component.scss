@@ -1,0 +1,38 @@
+$red:#cc3300;
+$orange: #ff5c00;
+$black: #000;
+.no-border {
+  background-color: transparent;
+  border: none;
+}
+.pagination {
+  margin: 0.3rem;
+  a {
+    &:hover, &:focus, &:visited, &:active {
+      color: $orange;
+      text-decoration: none;
+    }
+  }
+
+  .page-item {
+    &.disabled {
+      @extend .no-border;
+    }
+    &.active {
+      .page-link {
+        color: $orange;
+        background: $black;
+      }
+    }
+    .page-link {
+      @extend .no-border;
+      &:focus, &:hover, &.disabled {
+        @extend .no-border;
+      }
+      &:hover {
+        color: $orange;
+        text-decoration: none;
+      }
+    }
+  }
+}

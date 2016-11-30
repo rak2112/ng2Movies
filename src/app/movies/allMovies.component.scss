@@ -1,3 +1,14 @@
+$red:#cc3300;
+$orange: #ff5c00;
+$dullBlack: #373a3c;
+.footer {
+    background: $dullBlack;
+    border-radius: 4px;
+    height: 50px;
+    position: fixed;
+    bottom: -1px;
+    min-width: 100%;
+}
 body {
     // background: #141414;
     // color: #ccc;
@@ -33,28 +44,9 @@ iframe {
 }
 .movies-app {
   h4 {
-    margin-left: 15px;
+    margin-left: 0.5rem;
+    margin-top: 1.5rem;
   }
-  // .footer {
-  //   background: #222;
-  //   border-radius: 5px;
-  //   height: 45px;
-  //   .pagination {
-  //     margin: 7px 5px;
-  //   }
-  //   .pagination > li > a, .pagination > li > span {
-  //     background: #222;
-  //     background-color: none;
-  //     border: none;
-  //   }
-  //   .pagination > .active > a {
-  //     background-color: #ff5c00;
-  //     border-color: #ff5c00;
-  //   }
-  //   .pagination > .disabled > a {
-  //
-  //   }
-  // }
 }
 
 .movieList {
@@ -91,7 +83,8 @@ iframe {
       color: #ccc;
     }
     span {
-      margin: 0px 2px 6px;
+      border-right: 0;
+      color: $orange;
     }
   }
   .genre {

@@ -1,0 +1,5 @@
+<div #moviesTop class="movieList">
+  <div *ngFor='let movie of movies' class="col-lg-4 col-md-6 col-sm-6 movie">
+    <app-movie [movieData]='movie' [genres]='genres'></app-movie>
+  </div>
+</div>

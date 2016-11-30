@@ -1,6 +1,9 @@
+$black: #000;
+$orange: #ff5c00;
+$appBlack: #373a3c;
 body {
-    // background: #141414;
-    // color: #ccc;
+  height: 100vh;
+  min-height: 100vh;
 }
 a {
   color: #cc3300;
@@ -15,10 +18,60 @@ h3 {
     font-size: 22px;
     font-weight: normal;
 }
+input {
+  padding: 0.7rem;
+  margin-right: 0.2rem;
+  float: right;
+  width: 30%;
+}
+form {
+  padding-top: 0.2rem;
+}
 iframe {
   width: 100%;
 }
-
+.menu-items {
+  .active {
+    background: $black;
+  }
+}
+.movies-found {
+  min-height: auto;
+  max-height: 100vh;
+  overflow-y: scroll;
+  background: $appBlack;
+  width: 30%;
+  position: absolute;
+  right: 2px;
+  top: 44px;
+  z-index: 99999;
+  .details {
+    padding: 5px;
+    border-bottom: 1px solid $black;
+    overflow: hidden;
+    div, img {
+      float: left;
+    }
+    div {
+      margin-left: 1rem;
+      width: 70%;
+    }
+    span {
+      color: $orange;
+      display: block;
+      font-size: 0.8rem;
+    }
+    span:first-child {
+      color: #ccc;
+      font-size: 15px;
+      font-weight: bold;
+      padding-bottom: 0.5rem;
+    }
+    &:hover {
+      background: $black;
+    }
+  }
+}
 #app {
   margin: 5px auto;
 }
@@ -35,7 +88,7 @@ iframe {
   h4 {
     margin-left: 15px;
   }
-  .footer {
+.footer {
     background: #222;
     border-radius: 5px;
     height: 45px;
@@ -149,7 +202,7 @@ iframe {
 }
 
 .navbar {
-  height: 40px;
+  padding: 0;
   li {
     display: inline-block;
   }

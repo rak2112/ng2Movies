@@ -1,0 +1,9 @@
+.movieList {
+  overflow: hidden;
+  height: 90vh;
+  min-height:90vh;
+  overflow-y: scroll;
+  .movie {
+    padding: 15px 10px;
+  }
+}

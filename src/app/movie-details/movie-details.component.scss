@@ -1,0 +1,86 @@
+$orange: #ff5c00;
+.profileDetails {
+  border-radius: 40px;
+  border: 3px solid #eaeaea;
+  background: #ccc;
+  display: inline-block;
+  width: 100px;
+  height: 100px;
+}
+.movie-details {
+  padding: 1.9rem;
+  a {
+    color: #cc3300;
+    &:hover {
+        color: #ff5c00;
+        text-decoration: none;
+        cursor: pointer;
+    }
+  }
+  .trail {
+    max-height: 500px;
+    overflow:hidden;
+    img {
+      max-width: 100%;
+      min-width:100%;
+    }
+  }
+
+  h3 {
+    color: $orange;
+    text-align:center;
+  }
+  .attr-name {
+    font-weight: bold;
+    color: #cc3300;
+    margin-right: 5px;
+  }
+  .trail {
+    p {
+      padding-left: 1rem;
+    }
+  }
+  .trailers {
+    display: inline-block;
+    text-align: center;
+    margin: 0 8px 5px 0;
+    a {
+      display: inline-block;
+      span {
+        display: block;
+      }
+    }
+    .fa {
+      margin-right: 0.2rem;
+    }
+  }
+  .cast {
+    clear: both;
+    padding-top: 1rem;
+    .attr-name {
+      padding-left: 3rem;
+    }
+    li {
+      float: left;
+      list-style: none;
+      width: 178px;
+      text-align:center;
+    }
+    .cast-detail {
+      display: inline-block;
+      img {
+        @extend .profileDetails;
+      }
+      span {
+        display: block;
+        font-size: 0.8rem;
+      }
+      span:first-child {
+        font-weight: bold;
+      }
+      .initials {
+        @extend .profileDetails;
+      }
+    }
+  }
+}
