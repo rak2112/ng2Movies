@@ -4,15 +4,23 @@ import { Injectable } from '@angular/core';
 export class UtilService {
 
   constructor() { }
-  public getMovieGenres = (movieGenre, genres) =>{
+  public getMovieGenres = (movieGenre, genres, selectedGenres) =>{
     let movieGenres = [];
      movieGenre.forEach((elem) => {
        let genre = genres.filter((item)=> {
          return item.id === elem;
-        });
+       });
          movieGenres = [...movieGenres, ...genre]; //concatinating both arrays...
       });
-      return movieGenres;
+    //to map selected items in the filter..
+     movieGenres.map((elem)=>{
+       selectedGenres.forEach((selected)=>{
+         if(elem.id === selected.id) {
+           elem.selected = true;
+         }
+       });
+     });
+    return movieGenres;
   }
 
   public toFromDates = () => {

@@ -1,16 +1,19 @@
 <template ngbModalContainer></template>
-<div *ngIf="loaded" class="movie-details">
+<app-loader *ngIf="isFetching"></app-loader>
+<app-error-laoder *ngIf="hasError" [errorStatus]='errorDetails'></app-error-laoder>
+
+<div *ngIf="!isFetching && !hasError" class="movie-details">
   <div class="movie-details col-lg-12 col-md-12 col-sm-12">
     <div class="col-lg-6 col-md-6 col-sm-6">
       <div class="trail">
         <p>
-          <span class="trailers" *ngFor="let trail of videos; trackBy: trackByFn">
+          <span class="trailers" *ngFor="let trail of details.videos; trackBy: trackByFn">
             <a (click)="openModal(trail.key)"><i class="fa fa-play-circle"></i>{{trail.name}}</a>
           </span>
         </p>
         <div class="container-fluid">
           <ngb-carousel>
-            <template ngbSlide *ngFor="let poster of images">
+            <template ngbSlide *ngFor="let poster of details.images">
               <img src="http://image.tmdb.org/t/p/w650{{poster}}" alt="Movie Poster">
             </template>
           </ngb-carousel>
@@ -18,27 +21,27 @@
       </div>
     </div>
     <div class="col-lg-6 col-md-6 col-sm-6">
-      <h3>{{details.original_title}}</h3>
+      <h3>{{details.movieDetails.original_title}}</h3>
       <div>
-        <span class="attr-name">Storyline:</span>
-        <p><span>{{details.overview}}</span></p>
+        <!-- <span class="attr-name">Storyline:</span> -->
+        <p><span>{{details.movieDetails.overview}}</span></p>
       </div>
-      <p><span class="attr-name">Ratings:</span> <span>{{details.vote_average}} <span class="fa fa-star"></span></span></p>
-      <p><span class="attr-name">Status:</span> <span>{{details.status}}</span></p>
-      <p><span class="attr-name">Language:</span> <span *ngFor="let lang of details.spoken_languages" class="btn btn-sm btn-outline-warning">{{lang.name}}</span></p>
-      <p><span class="attr-name">RunTime:</span> <span>{{details.runtime}} mins</span></p>
-      <p><span class="attr-name">Release Date:</span> <span *ngIf="details.release_date">{{details.release_date | date}}</span></p>
-      <p><span class="attr-name">Genres:</span> <span *ngFor="let genre of details.genres" class="btn btn-sm btn-outline-warning">{{genre.name}}</span></p>
+      <p><span class="attr-name">Ratings:</span> <span>{{details.movieDetails.vote_average}} <span class="fa fa-star"></span></span></p>
+      <p><span class="attr-name">Status:</span> <span>{{details.movieDetails.status}}</span></p>
+      <p><span class="attr-name">Language:</span> <span *ngFor="let lang of details.movieDetails.spoken_languages" class="btn btn-sm btn-outline-warning">{{lang.name}}</span></p>
+      <p><span class="attr-name">RunTime:</span> <span>{{details.movieDetails.runtime}} mins</span></p>
+      <p><span class="attr-name">Release Date:</span> <span *ngIf="details.movieDetails.release_date">{{details.movieDetails.release_date | date}}</span></p>
+      <p><span class="attr-name">Genres:</span> <span *ngFor="let genre of details.movieDetails.genres" class="btn btn-sm btn-outline-warning">{{genre.name}}</span></p>
     </div>
 
     <div class="cast clearfix">
       <p class="attr-name">Top Cast</p>
       <ol>
-        <li *ngFor='let castDetail of cast; let i = index; trackBy: trackByFn'>
+        <li *ngFor='let castDetail of details.cast; let i = index; trackBy: trackByFn'>
           <div class="cast-detail" *ngIf="i<6">
             <div class="profile">
               <img *ngIf="castDetail.profile_path" src="https://image.tmdb.org/t/p/w264_and_h264_bestv2{{castDetail.profile_path}}" alt="PP" />
-              <div *ngIf="!castDetail.profile_path" class="initials"></div>
+              <div *ngIf="!castDetail.profile_path" class="initials">{{castDetail.name | nameInitials}}</div>
             </div>
             <p>
               <span>{{castDetail.name}}</span>
@@ -52,11 +55,11 @@
     <div class="crew cast clearfix">
       <p class="attr-name">Crew</p>
       <ol>
-        <li *ngFor='let crewDetail of crew; let i = index; trackBy: trackByFn'>
+        <li *ngFor='let crewDetail of details.crew; let i = index; trackBy: trackByFn'>
           <div class="cast-detail" *ngIf="i<6">
             <div class="profile">
               <img *ngIf="crewDetail.profile_path" src="https://image.tmdb.org/t/p/w264_and_h264_bestv2{{crewDetail.profile_path}}" alt="PP" />
-              <div *ngIf="!crewDetail.profile_path" class="initials"></div>
+              <div *ngIf="!crewDetail.profile_path" class="initials">{{crewDetail.name | nameInitials}}</div>
             </div>
             <p>
               <span>{{crewDetail.name}}</span>

@@ -18,8 +18,8 @@ export class AppComponent {
     router.events.subscribe(val=> this.movie = ''); //resetting the search..
   }
 
-  onChange(movieName) {
-    console.log('name is', name);
+  onChange(movieName: string = 'movie'): void {
+    console.log('name is', movieName);
     this.movieService.searchMovies(movieName)
       .subscribe((res)=>{
         console.log('ressss', res);
@@ -31,7 +31,7 @@ export class AppComponent {
     });
   }
 
-  onSelectMovie(id): void {
+  onSelectMovie(id: number): void {
     console.log('id', id);
     this.movies=[];
   }

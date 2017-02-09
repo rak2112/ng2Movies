@@ -40,6 +40,11 @@ $orange: #ff5c00;
       margin: 0;
 
     }
+    .selected {
+      color: #fff;
+      background-color: #f0ad4e;
+      border-color: #f0ad4e;
+    }
   }
   .genre {
     display: inline-block;

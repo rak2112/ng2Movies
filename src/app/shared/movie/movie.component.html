@@ -2,7 +2,7 @@
   <img src="http://image.tmdb.org/t/p/w500/{{movieData.backdrop_path}}" alt="Movie Poster" />
   <div class="detail">
     <h3>{{movieData.original_title}}</h3>
-    <span class="btn btn-sm btn-outline-warning" *ngFor='let genre of movieGenres'>{{genre.name}}</span>
+    <span class="btn btn-sm btn-outline-warning" *ngFor='let genre of movieGenres' [ngClass]="{'selected': genre.selected}">{{genre.name}}</span>
     <p>
       Rating: {{movieData.vote_average | number:'1.1-1'}} <span class="fa fa-star"></span>
     </p>

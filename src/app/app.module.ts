@@ -19,7 +19,14 @@ import { LoaderComponent } from './shared/loader/loader.component';
 import { ErrorComponent } from './shared/error-loader/error-loader.component';
 import { MovieDetailsComponent } from './movie-details/movie-details.component';
 import { ModalComponent } from './shared/modal/modal.component';
+import { FilterComponent } from './shared/filters-component/filters.component';
+import { MultiSelectComponent } from './shared/multi-select/multi-select.component';
 
+
+import { NameInitialsPipe } from './filters/name-initials.pipe.ts';
+
+import {movieReducer, movieDetailReducer} from './reducers/movies.reducer'
+import {Store, StoreModule} from '@ngrx/store';
 
 @NgModule({
   declarations: [
@@ -32,16 +39,21 @@ import { ModalComponent } from './shared/modal/modal.component';
     MovieListComponent,
     MovieComponent,
     MovieDetailsComponent,
-    ModalComponent
+    ModalComponent,
+    FilterComponent,
+    MultiSelectComponent,
+    NameInitialsPipe
   ],
   imports: [
     BrowserModule,
     FormsModule,
     HttpModule,
     NgbModule.forRoot(),
+    StoreModule.provideStore({movieReducer, movieDetailReducer}),
     RouterModule.forRoot([
       {path: 'home', component: Home},
       {path: 'movies', component: AllMovies},
+      {path: 'inCinemas', component: AllMovies},
       {path: 'popular', component: AllMovies},
       {path: 'upComing', component: AllMovies},
       {path: 'latest', component: AllMovies},

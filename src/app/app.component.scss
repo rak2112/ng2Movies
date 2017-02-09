@@ -31,6 +31,12 @@ iframe {
   width: 100%;
 }
 .menu-items {
+  .nav {
+    float: left;
+  }
+  .navbar-dark {
+    overflow: hidden;
+  }
   .active {
     background: $black;
   }
@@ -46,11 +52,15 @@ iframe {
   top: 44px;
   z-index: 99999;
   .details {
-    padding: 5px;
     border-bottom: 1px solid $black;
     overflow: hidden;
     div, img {
       float: left;
+    }
+    a {
+      display: block;
+      height: 75px;
+      padding: 5px;
     }
     div {
       margin-left: 1rem;

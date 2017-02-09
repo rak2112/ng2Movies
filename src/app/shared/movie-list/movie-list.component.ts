@@ -10,11 +10,11 @@ export class MovieListComponent implements OnChanges {
   @ViewChild('moviesTop') movieTop: ElementRef;
   @Input() public movies: Array<{}> = [];
   @Input() public genres: Array<string> = [];
+  @Input() public selectedGenres: Array<string> = [];
 
   constructor(private renderer: Renderer) {}
 
   ngOnChanges() {
-    console.log('changeme');
     this.renderer.setElementProperty(this.movieTop.nativeElement, 'scrollTop', 0);
   }
 }

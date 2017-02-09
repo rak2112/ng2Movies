@@ -13,8 +13,7 @@ export class MoviesPaginationComponent {
   @Output() selectedPage: EventEmitter<number> = new EventEmitter<number>();
 
 
-  onPageChange(currentPage) { console.log('thisss', this);
-    console.log('currentPage', currentPage);
+  onPageChange(currentPage) {
     this.selectedPage.emit(currentPage);
   }
 }

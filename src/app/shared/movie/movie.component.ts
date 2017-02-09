@@ -11,12 +11,14 @@ export class MovieComponent implements OnInit {
   constructor(private _utilService: UtilService) {}
   @Input() movieData: any = {};
   @Input() genres: any = [];
+  @Input() public selectedGenres: Array<string> = [];
 
   ngOnInit() {
     this.getGenres();
   }
+
   getGenres() {
     let movieGenre = this.movieData.genre_ids;
-    this.movieGenres = this._utilService.getMovieGenres(movieGenre, this.genres);
+    this.movieGenres = this._utilService.getMovieGenres(movieGenre, this.genres, this.selectedGenres);
   }
 }

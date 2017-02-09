@@ -1,0 +1,81 @@
+$orange: #f0ad4e;
+$gray: #ccc;
+
+.filters {
+  width: 250px;
+  margin: 0 30px 0 11px;
+  .multi-select{
+    width: 300px;
+  }
+}
+.d-inline-block {
+  width: 100%;
+  .multi-select {
+    position: absolute;
+    top: 33px;
+    left: 0;
+    height: 37px;
+    overflow-y: scroll;
+    width: 100%;
+    border: 1px solid $orange;
+    border-radius: 4px;
+  }
+  input {
+    width: 92%;
+    border: none;
+  }
+  .selected-btn {
+    color: #fff;
+    background-image: none;
+    background-color: $orange;
+    border-color: $orange;
+    border-radius: 5px;
+    padding: 1px 4px;
+    width: auto;
+    margin: 2px;
+    float: left;
+  }
+  .dropdown-menu {
+    width: 100%;
+    top: 115%;
+  }
+}
+.dropdown-toggle::after{
+  margin-left: -.7em;
+}
+
+.single-select {
+  .dropdown-toggle {
+    width: 100%;
+    border:1px solid $orange;
+    border-radius: 4px;
+    .btn {
+      width: 90%;
+    }
+  }
+  .btn {
+    border: none;
+  }
+  .dropdown-menu {
+    top: 97%;
+  }
+  .btn-outline-warning, &:hover, &:focus,&:visited, &:active, &:active:hover {
+    color: $orange;
+    background: transparent;
+    outline: 0;
+  }
+  .btn:active:hover {
+    color: $orange;
+    background: transparent;
+    outline: 0;
+  }
+  .btn:active:focus {
+    outline: 0;
+  }
+
+}
+.d-inline-block.open {
+  .dropdown-menu {
+    display: block;
+  }
+}

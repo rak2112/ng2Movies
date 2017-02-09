@@ -1,0 +1,18 @@
+<div class="filters">
+  <div ngbDropdown class="d-inline-block" [ngClass]="{'single-select': !isMultiSelect}">
+    <label>{{label}} </label>
+    <div id="dropdownMenu1" ngbDropdownToggle >
+    <input *ngIf="isMultiSelect" type="text"/>
+    <button *ngIf="!isMultiSelect" class="btn btn-outline-warning">{{selectedFilter.name || 'None'}}</button>
+      <div *ngIf="isMultiSelect" class="multi-select">
+        <div class="btn-outline-warning selected-btn" *ngFor="let selectedItem of multiSelectItems; let i = index; trackBy: trackByFn">
+          <span>{{selectedItem.name}}</span>
+          <span (click)="onRemove(selectedItem, i)"><i class="fa fa-remove"></i></span>
+        </div>
+     </div>
+   </div>
+    <div class="dropdown-menu" aria-labelledby="dropdownMenu1">
+      <button class="dropdown-item" *ngFor="let item of items; let i = index; trackBy: trackByFn" (click)="onSelection(item)">{{item.name}}</button>
+    </div>
+  </div>
+</div>

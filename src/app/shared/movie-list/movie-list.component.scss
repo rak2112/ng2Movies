@@ -3,6 +3,10 @@
   height: 90vh;
   min-height:90vh;
   overflow-y: scroll;
+  flex-flow: row wrap;
+  -moz-flex-flow: row wrap;
+  -webkit-flex-flow: row wrap;
+  display: flex;
   .movie {
     padding: 15px 10px;
   }

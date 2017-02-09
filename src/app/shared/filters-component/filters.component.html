@@ -1,0 +1,5 @@
+<div class="container row">
+  <multi-select-cmp [items]="filters.years" [label]=" 'Years' " [selectedFilter]="selectedFilters.years" (onFilterChange)="onFilterSelection($event)"></multi-select-cmp>
+  <multi-select-cmp [items]="filters.otherFilters" label="Release Date" [selectedFilter]="selectedFilters.otherFilters" (onFilterChange)="onFilterSelection($event)"></multi-select-cmp>
+  <multi-select-cmp [items]="filters.genres" label="Filter By" [isMultiSelect]=true [multiSelectItems]="selectedFilters.multiSelectors" (onFilterChange)="onFilterSelection($event)" (onSelectionRemove)="onItemRemove($event)"></multi-select-cmp>
+</div>

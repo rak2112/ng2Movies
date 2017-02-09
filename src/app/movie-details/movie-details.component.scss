@@ -1,4 +1,19 @@
 $orange: #ff5c00;
+
+ngb-modal-window {
+  opacity: 1 !important;
+}
+.modal-backdrop.fade {
+  opacity: 0.5 !important;
+}
+.modal.fade {
+  opacity: 1 !important; //needs to be removed..
+}
+.modal-dialog {
+  margin: 15% auto;
+}
+
+
 .profileDetails {
   border-radius: 40px;
   border: 3px solid #eaeaea;
@@ -8,6 +23,9 @@ $orange: #ff5c00;
   height: 100px;
 }
 .movie-details {
+  display: flex;
+  flex-flow: row wrap;
+  -webkit-flex-flow: row wrap;
   padding: 1.9rem;
   a {
     color: #cc3300;
@@ -29,6 +47,7 @@ $orange: #ff5c00;
   h3 {
     color: $orange;
     text-align:center;
+    font-size: 2rem;
   }
   .attr-name {
     font-weight: bold;
@@ -79,6 +98,10 @@ $orange: #ff5c00;
         font-weight: bold;
       }
       .initials {
+        color: $orange;
+        font-size: 1.4rem;
+        padding-top: 1.6rem;
+        font-weight: bold;
         @extend .profileDetails;
       }
     }
