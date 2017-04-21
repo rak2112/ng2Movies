@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 export class UtilService {
 
   constructor() { }
-  public getMovieGenres = (movieGenre, genres, selectedGenres) =>{
+  public getMovieGenres = (movieGenre=[], genres=[], selectedGenres=[]) =>{
     let movieGenres = [];
      movieGenre.forEach((elem) => {
        let genre = genres.filter((item)=> {

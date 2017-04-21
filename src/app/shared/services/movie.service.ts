@@ -12,17 +12,16 @@ import 'rxjs/add/Observable/forkJoin';
 import 'rxjs/add/Observable/throw';
 import { paths } from './locationPaths';
 import { UtilService } from './util.service';
+import { IMovie, IMovies, ISelectedFilters } from './../dataModels/index';
 
-interface filterState {
-  selectedFilters:{}
-}
+
 @Injectable()
 export class MovieService {
   filters: any;
   state: any;
   constructor(private _http: Http, private _utilSvc: UtilService, private store: Store<any>) {
-    store.select('movieReducer')
-      .subscribe((state: filterState) => {
+    store.select('movies')
+      .subscribe((state: ISelectedFilters) => { console.log('selected', state)
         this.state = state;
       });
   }
@@ -47,19 +46,24 @@ export class MovieService {
     }
   }
 
-
-
-  public searchMovies(movie: string) {
-    return this._http.get(`${paths.apiUrl}/search/multi${paths.apiKey}&language=en-US&query=${movie}`)
-             .map((res: Response)=>{
-              let data = res.json().results;
-              data.map((movie)=> {
-                if(movie.release_date) {
-                  movie.releaseYear = new Date(movie.release_date).getFullYear();
-                }
-              });
-              return data.filter((movie)=> movie.media_type === 'movie');
-             });
+  public searchMovies(movieName: string){
+    this._http.get(`${paths.apiUrl}/search/multi${paths.apiKey}&language=en-US&query=${movieName}`)
+    .map((res: Response)=> {
+      let data = res.json();
+      data.results.map((movie)=> {
+        if(movie.release_date) {
+          movie.releaseYear = new Date(movie.release_date).getFullYear();
+        }
+      });
+      let movies = data.results.filter((movie)=> movie.media_type === 'movie');
+      return {
+        movie: movieName,
+        movies
+      }
+    })
+     .subscribe((res)=>{
+        this.store.dispatch({type: 'TRIDGGER_SEARCH', payload: res});
+     });
   }
 
   public getUrlYear(years) {
@@ -84,7 +88,7 @@ export class MovieService {
     return genreUrl;
   }
 
-  public getAllMovies(pageNo: number) { console.log('state', this.state);
+  public getAllMovies(pageNo: number) {
     let baseUrl = `${paths.apiUrl}/discover/movie${paths.apiKey}&page=${pageNo}`;
     let { years, otherFilters, multiSelectors } = this.state.selectedFilters;
     let totalGenres = multiSelectors.length;
@@ -96,7 +100,6 @@ export class MovieService {
       this._http.get(moviesUrl).map((res) => res.json()).catch(this.handleError),
       this._http.get(`${paths.apiUrl}/genre/movie/list${paths.apiKey}`).map((res)=> res.json())
     ).subscribe((res) => {
-        //console.log('data', res);
         this.store.dispatch({type:'LOAD_SUCCESS', payload: res});
       },
       (error => {
@@ -209,16 +212,16 @@ export class MovieService {
   public dispatchFilters(item, currentRoute, pageNo) : void {
     switch(item.type) {
       case 'years':
-      this.store.dispatch({type:'FILTER_CHANGED_YEARS', payload: item});
-      break;
+        this.store.dispatch({type:'FILTER_CHANGED_YEARS', payload: item});
+        break;
       case 'otherFilters':
-      this.store.dispatch({type:'FILTER_CHANGED_OTHERS', payload: item});
-      break;
+        this.store.dispatch({type:'FILTER_CHANGED_OTHERS', payload: item});
+        break;
       case 'remove_genres':
-      this.store.dispatch({type:'FILTER_REMOVE_MULTI', payload:item});
-      break;
+        this.store.dispatch({type:'FILTER_REMOVE_MULTI', payload:item});
+        break;
       default:
-      this.store.dispatch({type:'FILTER_ADD_MULTI', payload: item});
+        this.store.dispatch({type:'FILTER_ADD_MULTI', payload: item});
     }
     this.getMovies(pageNo, currentRoute);
   }

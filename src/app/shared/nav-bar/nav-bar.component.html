@@ -1,0 +1,51 @@
+<div class="menu-items">
+  <nav class="navbar-dark bg-inverse">
+    <ul class="nav">
+      <li class="nav-item">
+        <a class="nav-link" routerLinkActive="active" [routerLink]="['/home']">Home</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLinkActive="active" [routerLink]="['/movies']">All Movies</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLinkActive="active" [routerLink]="['/latest']">Latest</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLinkActive="active" [routerLink]="['/popular']">Popular</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLinkActive="active" [routerLink]="['/inCinemas']">In Cinemas</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLinkActive="active" [routerLink]="['/upComing']">Up Coming</a>
+      </li>
+    </ul>
+    <ul class=" nav user-profile">
+      <li class="nav-item">
+        <a *ngIf="!authSvc.hasAuth()" class="nav-link" routerLinkActive="active" [routerLink]="['user/login']">Login</a>
+        <a *ngIf="authSvc.hasAuth()" class="nav-link" routerLinkActive="active" [routerLink]="['user/profile']">Welcome <span class="user">{{userDetail?.userName | nameInitials}}</span></a>
+      </li>
+      <li class="nav-item">
+        <a *ngIf="authSvc.hasAuth()" href="" class="nav-link" (click)="logOut($event)">Log out</a>
+      </li>
+    </ul>
+  </nav>
+  <div class="search-dialog">
+    <div class="container">
+      <span class="fa fa-search"></span>
+      <input class="form-control" [ngModel]="moviesFound.movie" (ngModelChange)="onFilterChange($event)" type="text" placeholder="Search for movies"/>
+    </div>
+  </div>
+</div>
+<div class="movies-found" *ngIf="moviesFound.movies.length" (mouseleave)="resetSelection()">
+  <div class="details" *ngFor="let movie of moviesFound.movies">
+    <a routerLink="/movieDetails/{{movie.id}}" (click)="resetSelection()">
+      <img src="https://image.tmdb.org/t/p/w45_and_h67_bestv2{{movie.poster_path}}" alt="MP" />
+      <div>
+        <span [innerText]="movie.title"></span>
+        <span [innerText]="movie.releaseYear"></span>
+      </div>
+      <span class="btn btn-sm btn-outline-warning">Movie</span>
+    </a>
+  </div>
+</div>

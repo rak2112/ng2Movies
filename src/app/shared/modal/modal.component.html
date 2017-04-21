@@ -1,6 +1,7 @@
 <div>
     <div class="modal-body">
-      <iframe class="e2e-iframe-trusted-src" [src]="trustedUrl" width="400" height="300" frameBorder="0" allowFullScreen="true"></iframe>
+      <iframe *ngIf="hasVideo" class="e2e-iframe-trusted-src" [src]="trustedUrl" width="400" height="300" frameBorder="0" allowFullScreen="true"></iframe>
+      <div class="container" *ngIf="!hasVideo">{{modalInput}}</div>
     </div>
     <div class="modal-footer">
       <button type="button" class="btn btn-secondary" (click)="activeModal.close('Close click')">Close</button>

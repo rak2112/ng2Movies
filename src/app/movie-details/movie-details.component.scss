@@ -30,7 +30,7 @@ ngb-modal-window {
   a {
     color: #cc3300;
     &:hover {
-        color: #ff5c00;
+        color: $orange;
         text-decoration: none;
         cursor: pointer;
     }
@@ -62,22 +62,35 @@ ngb-modal-window {
   .trailers {
     display: inline-block;
     text-align: center;
-    margin: 0 8px 5px 0;
+    margin-bottom: 5px;
     a {
       display: inline-block;
+      float: left;
       span {
         display: block;
+      }
+      &:hover {
+        color: $orange;
       }
     }
     .fa {
       margin-right: 0.2rem;
     }
   }
+  .tabs {
+    margin-top: 5px;
+    width: 100%;
+  }
   .cast {
     clear: both;
     padding-top: 1rem;
     .attr-name {
       padding-left: 3rem;
+    }
+    ol {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
     }
     li {
       float: left;

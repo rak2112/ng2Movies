@@ -1,87 +1,16 @@
 $black: #000;
 $orange: #ff5c00;
 $appBlack: #373a3c;
-body {
-  height: 100vh;
-  min-height: 100vh;
-}
-a {
-  color: #cc3300;
-  &:hover {
-      color: #ff5c00;
-      text-decoration: none;
-      cursor: pointer;
-  }
-}
+
 h3 {
     color: #ccc;
     font-size: 22px;
     font-weight: normal;
 }
-input {
-  padding: 0.7rem;
-  margin-right: 0.2rem;
-  float: right;
-  width: 30%;
-}
-form {
-  padding-top: 0.2rem;
-}
 iframe {
   width: 100%;
 }
-.menu-items {
-  .nav {
-    float: left;
-  }
-  .navbar-dark {
-    overflow: hidden;
-  }
-  .active {
-    background: $black;
-  }
-}
-.movies-found {
-  min-height: auto;
-  max-height: 100vh;
-  overflow-y: scroll;
-  background: $appBlack;
-  width: 30%;
-  position: absolute;
-  right: 2px;
-  top: 44px;
-  z-index: 99999;
-  .details {
-    border-bottom: 1px solid $black;
-    overflow: hidden;
-    div, img {
-      float: left;
-    }
-    a {
-      display: block;
-      height: 75px;
-      padding: 5px;
-    }
-    div {
-      margin-left: 1rem;
-      width: 70%;
-    }
-    span {
-      color: $orange;
-      display: block;
-      font-size: 0.8rem;
-    }
-    span:first-child {
-      color: #ccc;
-      font-size: 15px;
-      font-weight: bold;
-      padding-bottom: 0.5rem;
-    }
-    &:hover {
-      background: $black;
-    }
-  }
-}
+
 #app {
   margin: 5px auto;
 }

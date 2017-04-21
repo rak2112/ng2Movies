@@ -1,8 +1,18 @@
 <app-loader *ngIf="isFetching"></app-loader>
 <app-error-laoder *ngIf="hasError" [errorStatus]='errorStatus'></app-error-laoder>
 <div *ngIf="!isFetching && !hasError" class="movies-app">
-  <app-filters-cmp [filters]="filters" [selectedFilters]="selectedFilters" (onFilterChange)="onFilterChange($event)" (onRemoveSelection)="onRemoveSelection($event)"></app-filters-cmp>
-  <app-movie-list [movies]='movies' [genres]='filters.genres' [selectedGenres]="selectedFilters.multiSelectors"></app-movie-list>
+  <app-filters-cmp
+    [filters]="filters"
+    [selectedFilters]="selectedFilters"
+    (onFilterChange)="onFilterChange($event)"
+    (onRemoveSelection)="onRemoveSelection($event)">
+  </app-filters-cmp>
+  <app-movie-list
+    [movies]='movies'
+    [genres]='filters.genres'
+    [selectedGenres]="selectedFilters.multiSelectors"
+    (onEditlist)="onEditlist($event)">
+  </app-movie-list>
   <div class="footer">
     <app-movies-pagination [pageNo]='pageNo' [collectionSize]='collectionSize' (selectedPage)='onPageChange($event)'></app-movies-pagination>
   </div>

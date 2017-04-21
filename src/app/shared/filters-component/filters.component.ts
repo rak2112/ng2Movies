@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, OnChanges, Output, EventEmitter, ViewEncapsulation } from '@angular/core';
-
+import { IFilters, ISelectedFilters } from './../dataModels/index';
 @Component({
   selector: 'app-filters-cmp',
   encapsulation: ViewEncapsulation.None,
@@ -7,16 +7,16 @@ import { Component, OnInit, Input, OnChanges, Output, EventEmitter, ViewEncapsul
   styleUrls: ['./filters.component.scss']
 })
 export class FilterComponent {
-  @Input() public filters: {};
-  @Input() public selectedFilters:{};
+  @Input() public filters: IFilters;
+  @Input() public selectedFilters: ISelectedFilters;
   @Output() onFilterChange: EventEmitter<{}> = new EventEmitter<{}>();
   @Output() onRemoveSelection: EventEmitter<[{}]> = new EventEmitter<[{}]>();
 
-  onFilterSelection(item) {
+  onFilterSelection(item: {}) {
     this.onFilterChange.emit(item);
   }
 
-  onItemRemove(item) { console.log('filter removing')
+  onItemRemove(item: [{}]) {
     this.onRemoveSelection.emit(item);
   }
 }

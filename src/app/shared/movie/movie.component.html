@@ -1,11 +1,24 @@
 <div class="movie-data">
-  <img src="http://image.tmdb.org/t/p/w500/{{movieData.backdrop_path}}" alt="Movie Poster" />
+  <div class="img-wrapper">
+    <img *ngIf="movieData.backdrop_path" src="http://image.tmdb.org/t/p/w500/{{movieData.backdrop_path}}" alt="Movie Poster" />
+    <div *ngIf="!movieData.backdrop_path" class="no-poster">
+      No Poster Available
+    </div>
+    <div *ngIf="!userView" class="user-list">
+      <a (click)="onMarkAsFav($event, movieData)"><span class="fa fa-heart" [ngClass]="{'selected': isFav}"></span></a>
+      <a href="#" (click)="onAddToList($event, movieData)"><span class="fa fa-bookmark" [ngClass]="{'selected': isWatchList}"></span></a>
+    </div>
+  </div>
   <div class="detail">
     <h3>{{movieData.original_title}}</h3>
-    <span class="btn btn-sm btn-outline-warning" *ngFor='let genre of movieGenres' [ngClass]="{'selected': genre.selected}">{{genre.name}}</span>
     <p>
-      Rating: {{movieData.vote_average | number:'1.1-1'}} <span class="fa fa-star"></span>
+      <span><span class="fa fa-calendar"></span>{{movieData.release_date | date:'y'}}</span>
+      <span>{{movieData.vote_average | number:'1.1-1'}} <span class="fa fa-star"></span></span>
     </p>
-    <a routerLink="/movieDetails/{{movieData.id}}">View Details</a>
+    <p><a routerLink="/movieDetails/{{movieData.id}}">More Info</a></p>
+    <span class="btn btn-sm btn-outline-warning" *ngFor='let genre of movieGenres' [ngClass]="{'selected': genre.selected}">{{genre.name}}</span>
+    <div *ngIf="userView" class="user-view">
+      <a (click)="onMarkAsFav($event, movieData)"><span class="fa fa-heart" [ngClass]="{'selected': isFav}"></span></a>
+    </div>
   </div>
 </div>

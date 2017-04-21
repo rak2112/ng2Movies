@@ -1,43 +1,11 @@
-<div class="menu-items">
-  <nav class="navbar-dark bg-inverse">
-    <ul class="nav">
-      <li class="nav-item">
-        <a class="nav-link" routerLinkActive="active" [routerLink]="['/home']">Home</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" routerLinkActive="active" [routerLink]="['/movies']">All Movies</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" routerLinkActive="active" [routerLink]="['/latest']">Latest</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" routerLinkActive="active" [routerLink]="['/popular']">Popular</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" routerLinkActive="active" [routerLink]="['/inCinemas']">In Cinemas</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" routerLinkActive="active" [routerLink]="['/upComing']">Up Coming</a>
-      </li>
-    </ul>
-
-      <input class="form-control" [(ngModel)]="movie" (ngModelChange)="onChange($event)" type="text" placeholder="Search for movies">
-      {{movie}}
-  </nav>
-</div>
-<div class="movies-found" *ngIf="movies.length" on-mouseleave="onFocusOut()">
-  <div class="details" *ngFor="let movie of movies">
-    <a routerLink="/movieDetails/{{movie.id}}" (click)="onSelectMovie(movie.id)">
-      <img src="https://image.tmdb.org/t/p/w45_and_h67_bestv2{{movie.poster_path}}" alt="MP" />
-      <div class="">
-        <span>{{movie.title}}</span>
-        <span>{{movie.releaseYear}}</span>
-      </div>
-    </a>
-  </div>
-</div>
+<template ngbModalContainer></template>
+<app-nav-bar
+  [moviesFound]= "moviesFound$ | async"
+  [userDetail]= "userDetail$ | async"
+  (onChange)= "onChange($event)"
+  (onFocusOut)= "resetState()"
+  (onLogOut)= "onLogOut($event)"
+  ></app-nav-bar>
 <div>
   <router-outlet></router-outlet>
 </div>
-
-<!-- style="background: rgb(0, 0, 0); color: rgb(255, 92, 0); border-radius: 5px;" -->

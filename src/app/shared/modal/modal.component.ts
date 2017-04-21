@@ -9,16 +9,16 @@ import {NgbModal, NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 })
 export class ModalComponent implements OnInit{
   trustedUrl: any;
-  @Input() videoKey;
-  constructor(public activeModal: NgbActiveModal, private sanitizer: DomSanitizer) { console.log('this', this);
-
-  }
+  @Input() modalInput: string;
+  @Input() hasVideo: string;
+  constructor(
+    public activeModal: NgbActiveModal,
+    private sanitizer: DomSanitizer) {}
 
   ngOnInit() {
-    console.log('thisssss', this.videoKey);
-    let url = `http://www.youtube.com/embed/${this.videoKey}?autoplay=1`; console.log('url',url)
-    this.trustedUrl = this.sanitizer.bypassSecurityTrustResourceUrl(url);
-    console.log('hereee', this.trustedUrl)
+    if(this.hasVideo) {
+      let url = `http://www.youtube.com/embed/${this.modalInput}?autoplay=1`;
+      this.trustedUrl = this.sanitizer.bypassSecurityTrustResourceUrl(url);
+    }
   }
-
 }

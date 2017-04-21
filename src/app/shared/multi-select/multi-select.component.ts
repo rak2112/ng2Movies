@@ -22,7 +22,7 @@ export class MultiSelectComponent {
     this.onFilterChange.emit(item);
   }
 
-  onRemove(item, index) { console.log('index', index);
+  onRemove(item, index) {
     item.index = index;
     this.onSelectionRemove.emit(item);
   }

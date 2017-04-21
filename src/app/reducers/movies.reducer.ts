@@ -1,12 +1,5 @@
 import { ActionReducer, Action } from '@ngrx/store';
-import { MovieService } from './../services/movie.service';
 
-// class someSvc {
-//   super();
-//   constructor(private movieSvc: MovieService) {
-//
-//   }
-// }
 let currentYear = new Date().getFullYear();
 const initialStateMovies = {
   isFetching:true,
@@ -42,9 +35,8 @@ const initialStateMovies = {
 //   (state: T, action: Action)
 // }
 
-export function movieReducer ( state = initialStateMovies, action) {
-  // let some = new someSvc(); console.log('someee', some)
-    switch (action.type) {
+export function movies ( state = initialStateMovies, action) {
+  switch (action.type) {
         case 'RESET_LOADER':
             return Object.assign({}, state, {
               isFetching: true
@@ -96,11 +88,9 @@ export function movieReducer ( state = initialStateMovies, action) {
 }
 
 const initialStateDetails = {
+  isFetching:true,
   hasError: false,
   errorDetails: false,
-  isFetching:true,
-  showModal:false,
-  utubeKey:null,
   details:{
     movieDetails:{},
     videos:[],
@@ -111,25 +101,94 @@ const initialStateDetails = {
   }
 };
 
-export function movieDetailReducer ( state = initialStateDetails, action) {
+export function movieDetail ( state = initialStateDetails, action) {
     switch (action.type) {
         case 'RESET_LOADER':
           return Object.assign({}, state, {
             isFetching: true
           });
         case 'ERROR_DETAILS':
-        return Object.assign({}, state, {
-          hasError: true,
-          isFetching: false,
-          errorDetails: action.payload
-        });
+          return Object.assign({}, state, {
+            hasError: true,
+            isFetching: false,
+            errorDetails: action.payload
+          });
         case 'DETAILS_LOADED':
           return Object.assign({}, state, {
             isFetching: false,
             hasError: false,
             details: action.payload
           });
-        default :
-            return state;
+        default:
+          return state;
     }
+}
+
+const moviesFound = {
+  movies: [],
+  movie: null
+}
+
+export function searchedMovies(state = moviesFound, action) {
+  switch(action.type) {
+    case 'TRIDGGER_SEARCH':
+      return Object.assign({}, state, {
+        movie: action.payload.movie,
+        movies: action.payload.movies
+      });
+    case 'RESET_SEARCH':
+      return moviesFound;
+    default:
+      return moviesFound;
+
+  }
+}
+
+const auth = {
+  hasAuth: false,
+  sessionId: null,
+  userId: null,
+  userName: null,
+}
+
+export function authenticateUser(state = auth, action) {
+  switch(action.type) {
+    case 'USER_AUTHENTICATED':
+      return Object.assign({}, state, {
+        hasAuth: true,
+        sessionId: action.payload.sessionId,
+        userId: action.payload.id,
+        userName: action.payload.username
+      });
+    case 'USER_LOGGED':
+      return Object.assign({}, state, {
+        hasAuth: true
+      });
+    case 'USER_LOGGED_OUT':
+      return auth;
+    default:
+      return state;
+
+  }
+}
+
+const selectedMovies = {
+  favIds: [],
+  watchIds: [],
+  favs: {},
+  watchList: {}
+};
+export function userMovies(state= selectedMovies, action) {
+  switch (action.type) {
+    case 'LOADED_USER_LIST':
+      return Object.assign({}, state, {
+        favs: action.payload[0],
+        watchList: action.payload[1],
+        favIds: action.payload.favIds,
+        watchIds: action.payload.watchIds
+      });
+    default:
+      return state;
+
+  }
 }

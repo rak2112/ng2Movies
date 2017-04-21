@@ -37,7 +37,7 @@ $gray: #ccc;
   }
   .dropdown-menu {
     width: 100%;
-    top: 115%;
+    top: 129%;
   }
 }
 .dropdown-toggle::after{
@@ -77,5 +77,8 @@ $gray: #ccc;
 .d-inline-block.open {
   .dropdown-menu {
     display: block;
+    min-height: 200px;
+    height: 400px;
+    overflow-y: scroll;
   }
 }

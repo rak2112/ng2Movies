@@ -1,53 +1,34 @@
 import { Component, OnInit, OnDestroy, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute, Params }   from '@angular/router';
 import { Location }                 from '@angular/common';
-import { MovieService } from './../services/movie.service';
-import { ModalComponent } from './../shared/modal/modal.component';
-import {NgbModal, NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
+import { MovieService } from './../shared/services/movie.service';
+import { IStore, IDetails } from './../shared/dataModels/index';
 import { Store } from '@ngrx/store';
-import 'rxjs/add/operator/switchMap';
-
-interface MovieDetailState {
-  isFetching: boolean,
-  hasError: boolean,
-  errorDetails: {},
-  details: {
-    movieDetails:{}
-  },
-  openModal(videoKey: String): void
-}
-
-interface AppStore {
-  movies:{},
-  movieDetails: {}
-}
-
+import { Subject } from 'rxjs/Subject';
+import 'rxjs/add/operator/takeUntil';
 
 @Component({
   selector: 'app-movie-details',
-  encapsulation: ViewEncapsulation.None,
   templateUrl: './movie-details.component.html',
-  styleUrls: ['./movie-details.component.scss']
+  styleUrls: ['./movie-details.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
-export class MovieDetailsComponent implements MovieDetailState {
+
+export class MovieDetailsComponent implements IDetails {
   details: {movieDetails:{}};
   isFetching: boolean;
   hasError: boolean;
   errorDetails: {};
-  videos: Array<{}>;
-  images: Array<{}>;
-  cast: Array<{}>;
-  crew: Array<{}>;
-  loaded: boolean;
-  closeResult: string;
+
+  private ngOnDestroy$ = new Subject<void>();
   constructor(
     private location: Location,
     private _movieSvc: MovieService,
     private route: ActivatedRoute,
-    private modalService: NgbModal,
-    private store:Store<AppStore>) {
-      store.select('movieDetailReducer')
-        .subscribe((state: MovieDetailState) => {
+    private store:Store<IStore>) {
+      store.select('movieDetail')
+        .takeUntil(this.ngOnDestroy$)
+        .subscribe((state: IDetails) => {
           let {isFetching, hasError, errorDetails, details} = state;
           this.isFetching = isFetching;
           this.hasError = hasError;
@@ -57,13 +38,6 @@ export class MovieDetailsComponent implements MovieDetailState {
     }
 
   ngOnInit(): void {
-
-    // this.route.params
-    // .switchMap((params: Params) => this._movieSvc.getMovieDetails(+params['id']))
-    // .subscribe((res) => {
-    //   console.log('ress here', res);
-    // });
-
     this.route.params
     .map((params: Params) => +params['id'])
       .subscribe((id) =>{
@@ -73,11 +47,6 @@ export class MovieDetailsComponent implements MovieDetailState {
 
   ngOnDestroy() {
     this.store.dispatch({type:'RESET_LOADER'}); //reset the loader on exit.
+    this.ngOnDestroy$.next(null);
   }
-
-  openModal(videoKey) {
-    const modalRef = this.modalService.open(ModalComponent);
-    modalRef.componentInstance.videoKey = videoKey;
-  }
-
 }

@@ -11,14 +11,8 @@ import { Component, OnInit, Input } from '@angular/core';
              <div>`,
   styleUrls: ['./error-loader.scss']
 })
-export class ErrorComponent implements OnInit{
+export class ErrorComponent{
   constructor() {
-    console.log('thisError', this);
   }
   @Input() errorStatus: string;
-
-  ngOnInit() {
-
-  }
-
 }

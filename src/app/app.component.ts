@@ -1,6 +1,19 @@
 import { Component } from '@angular/core';
-import { MovieService } from './services/movie.service';
-import { Router }   from '@angular/router';
+import { MovieService } from './shared/services/movie.service';
+import { AuthService } from './user/auth.service';
+import { ISearch, IStore } from './shared/dataModels/index';
+import { Store } from '@ngrx/store';
+import { Subject } from 'rxjs/Subject';
+import { Observable } from 'rxjs/Observable';
+
+import { Router, NavigationEnd }   from '@angular/router';
+
+
+interface IUserDetail {
+  hasAuth: boolean,
+  sessionId: string,
+  userId: string
+}
 
 @Component({
   selector: 'app-root',
@@ -8,35 +21,32 @@ import { Router }   from '@angular/router';
   styleUrls: ['./app.component.scss']
 })
 
-export class AppComponent {
-
-  title : string = 'app works now!';
-  movie: string = '';
-  movies: any = {};
-  //movie : string ='';
-  constructor(private movieService: MovieService, private router: Router){
-    router.events.subscribe(val=> this.movie = ''); //resetting the search..
+export class AppComponent{
+  moviesFound$: Observable<ISearch>;
+  userDetail$: Observable<ISearch>;
+  constructor(
+      private movieService: MovieService,
+      private router: Router,
+      private authSvc: AuthService,
+      private store: Store<IStore>) {
+        this.moviesFound$ = this.store.select('searchedMovies');
+        this.userDetail$ = this.store.select('authenticateUser');
   }
 
-  onChange(movieName: string = 'movie'): void {
-    console.log('name is', movieName);
-    this.movieService.searchMovies(movieName)
-      .subscribe((res)=>{
-        console.log('ressss', res);
-        this.movies = res;
-      },
-    (error) =>{
-      console.log('errror');
-      this.movies = [];
-    });
+  ngOnInit() {
+    this.authSvc.getUser();
   }
 
-  onSelectMovie(id: number): void {
-    console.log('id', id);
-    this.movies=[];
+  onChange(movieName: string): void {
+    this.movieService.searchMovies(movieName);
   }
 
-  public onFocusOut(): void {
-    this.movies = [];
+  resetState(): void {
+    this.store.dispatch({type: 'RESET_SEARCH'});
+  }
+  onLogOut(event): void {
+    event.preventDefault();
+    this.authSvc.logOut();
+    this.router.navigate(['home']);
   }
 }

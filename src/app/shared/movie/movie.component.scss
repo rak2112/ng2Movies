@@ -1,15 +1,17 @@
 $red:#cc3300;
+$gray: #ccc;
+$black: #000;
 $orange: #ff5c00;
 .movie-data {
   box-shadow: 3px 6px 11px #191919;
   h3 {
-      color: #ccc;
-      font-size: 1.3rem;
+      color: #00d573;
+      font-size: 1.1rem;
       font-weight: normal;
       margin: .5rem 0;
   }
   a {
-    color: #cc3300;
+    color: $gray;
     &:hover {
         color: #ff5c00;
         text-decoration: none;
@@ -24,6 +26,40 @@ $orange: #ff5c00;
   img {
     width: 100%;
   }
+
+  .user-list {
+    display: none;
+    position: absolute;
+    padding: 9px;
+    bottom: 175px;
+    background: black;
+    opacity: 0.7;
+    width: 95.4%;
+    height: 40px;
+    .fa {
+      font-size: 25px;
+      color: #fff;
+      margin-right: 6px;
+    }
+    .fa.selected {
+      color: $red;
+    }
+  }
+  .img-wrapper {
+    &:hover {
+      .user-list {
+        display: block;
+      }
+    }
+  }
+  .no-poster {
+    background: #eaeaea;
+    color: #262626;
+    height: 300px;
+    padding-top: 100px;
+    font-size: 1.3rem;
+    text-align: center;
+  }
   .detail {
     background: #262626;
     /* box-shadow: -2px -101px 141px #000; */
@@ -32,7 +68,14 @@ $orange: #ff5c00;
     overflow: hidden;
     p {
       color: #ccc;
-      margin-bottom: 0.3rem;
+      margin: 0px 0 5px 0;
+      padding-bottom: 3px;
+      span {
+        margin-right: 30px;
+      }
+      .fa-calendar {
+        margin-right: 5px;
+      }
     }
     span {
       border-radius: 1.2rem;

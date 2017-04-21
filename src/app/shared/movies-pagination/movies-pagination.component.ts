@@ -2,9 +2,9 @@ import { Component, OnInit, Input, OnChanges, Output, EventEmitter, ViewEncapsul
 
 @Component({
   selector: 'app-movies-pagination',
-  encapsulation: ViewEncapsulation.None,
   templateUrl: './movies-pagination.component.html',
-  styleUrls: ['./movies-pagination.component.scss']
+  styleUrls: ['./movies-pagination.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class MoviesPaginationComponent {
   //page: number;
@@ -13,7 +13,7 @@ export class MoviesPaginationComponent {
   @Output() selectedPage: EventEmitter<number> = new EventEmitter<number>();
 
 
-  onPageChange(currentPage) {
+  onPageChange(currentPage: number) {
     this.selectedPage.emit(currentPage);
   }
 }
