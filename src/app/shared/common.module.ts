@@ -10,18 +10,11 @@ import { RouterModule } from '@angular/router';
 import { ActivatedRoute, Params }   from '@angular/router';
 //import { Tab, Tabs, MovieListComponent, MovieComponent, } from './index';
 import {
-  LoaderComponent,
-  ErrorComponent,
   Tab,
   Tabs,
-  //NavBarComponent,
-  FilterComponent,
   MovieComponent,
   MovieListComponent,
-  MultiSelectComponent,
-  MoviesPaginationComponent,
-  ModalTriggerDirective,
-  NameInitialsPipe
+  MoviesPaginationComponent
 } from './index';
 
 // import {

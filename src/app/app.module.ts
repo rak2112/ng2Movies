@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { CommonModule } from '@angular/common';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+
 import {Store, StoreModule} from '@ngrx/store';
 import { routerReducer, RouterStoreModule } from '@ngrx/router-store';
 
@@ -28,14 +29,16 @@ import {
   ModalComponent,
   NavBarComponent,
   FilterComponent,
-  MultiSelectComponent,
   ModalTriggerDirective,
-  NameInitialsPipe
+  NameInitialsPipe,
 } from './shared/index';
+
+import {MultiSelectComponent } from './shared/multi-select/multi-select.component';
 
 @NgModule({
   declarations: [
     AppComponent,
+    MultiSelectComponent,
     AllMovies,
     Home,
     LoaderComponent,
@@ -45,7 +48,7 @@ import {
     ModalComponent,
     ModalTriggerDirective,
     FilterComponent,
-    MultiSelectComponent,
+
     NameInitialsPipe,
     NavBarComponent
   ],
