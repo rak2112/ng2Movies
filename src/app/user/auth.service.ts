@@ -11,6 +11,7 @@ import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/Observable/forkJoin';
 import 'rxjs/add/Observable/throw';
+import { UINotification } from './../shared/services/ui-notification.service';
 import { paths } from './../shared/services/locationPaths';
 import { IMovie, IMovies, ISelectedFilters } from './../shared/dataModels/index';
 
@@ -27,9 +28,9 @@ export class AuthService {
   currentUser: boolean = false;
   userCredentials: {id: null, sessionId: null};
   some$: Observable<any>;
-  constructor(private _http: Http, private store: Store<AppStore>) {
+  constructor(private _http: Http, private store: Store<AppStore>, private uiNotifications: UINotification) {
     store.select('authenticateUser')
-      .subscribe((state: any) => { console.log('state of user intital', state);
+      .subscribe((state: any) => {
         this.state = state;
       });
   }
@@ -49,7 +50,6 @@ export class AuthService {
       this._http.get(`${paths.apiUrl}/account${paths.apiKey}&session_id=${session_id}`)
       .map(res => res.json())
       .subscribe(res=>{
-        console.log('resssss after all', res);
         res.sessionId = session_id;
         localStorage.setItem('sessionId', session_id);
         localStorage.setItem('userId', res.id);
@@ -57,7 +57,7 @@ export class AuthService {
         this.store.dispatch({type: 'USER_AUTHENTICATED', payload: res});
         this.authUser(res);
       },
-      (error => {
+      (error => { //TODO: pass the generic error handler..
         console.log('err', error);
       }));
     });
@@ -82,8 +82,11 @@ export class AuthService {
   }
   public logOut(): void {
     localStorage.removeItem('sessionId');
+    localStorage.removeItem('userId');
+    localStorage.removeItem('userName');
     this.currentUser = false;
     this.store.dispatch({type: 'USER_LOGGED_OUT'});
+    this.store.dispatch({type: 'NO_USER_LOGGED'});
   }
   public hasAuth(): boolean {
     return this.currentUser;
@@ -95,9 +98,14 @@ export class AuthService {
     return Observable.throw(error);
   }
 
-  public markFav(movieData): void {
+  public markFav(movieData, userView): void {
+    if(!this.state.sessionId) {
+      this.uiNotifications.warning(...['Sorry', 'You need to login to edit records']);
+      return;
+    }
     let data, url;
-    if(!movieData.watchList) {
+    let isWatchItem = movieData.watchList
+    if(!isWatchItem) {
       url = 'favorite';
       data = {media_type: 'movie', media_id: movieData.id, favorite: movieData.favorite};
     }
@@ -113,32 +121,64 @@ export class AuthService {
       options
     )
     .map(res => res.json())
-    .subscribe(res => {console.log('resssss', res)});
+    .subscribe(res => {
+      this.generateNotification(movieData);
+      if(!isWatchItem && userView) {
+        this.store.dispatch({type:'REMOVE_FROM_FAVS', payload: movieData.id});
+      }
+      else if(isWatchItem && userView) {
+        this.store.dispatch({type:'REMOVE_FROM_WATCHLIST', payload: movieData.id});
+      }
+    });
   }
 
-  public getUserMovies() { console.log('user state in getting details', this.state);
-    let dataFetched$ = new Subject();
+  public generateNotification(data) {
+    if(!data.watchList && data.favorite) {
+      this.uiNotifications.success(...['Success', 'Marked as Favorite']);
+    }
+    else if(!data.watchList && !data.favorite) {
+      this.uiNotifications.success(...['Success', 'Removed from Favorites']);
+    }
+    else if(data.watchList && data.includeInWatch) {
+      this.uiNotifications.success(...['Success', 'Added in the Watchlist']);
+    }
+    else if(data.watchList && !data.includeInWatch) {
+      this.uiNotifications.success(...['Success', 'Removed from Watchlist']);
+    }
+  }
+
+  public getUserMovies() {
+    let dataFetched$ = new Observable();
     return Observable.create(observer => {
-      return Observable.forkJoin(
-         this._http.get(`${paths.apiUrl}/account/${localStorage.getItem('userId')}/favorite/movies?&api_key=60773f18ef6a7a9ee3d4a640fab964eb&session_id=${localStorage.getItem('sessionId')}`).map((res) => res.json()).catch(this.handleError),
-         this._http.get(`${paths.apiUrl}/account/${localStorage.getItem('userId')}/watchlist/movies?&api_key=60773f18ef6a7a9ee3d4a640fab964eb&session_id=${localStorage.getItem('sessionId')}`).map((res)=> res.json())
-       )
-       .subscribe((res: any) => {
-         let [favs, watchList ] = res;
-         let favIds = favs.results.map(movie=>movie.id);
-         let watchIds = watchList.results.map(movie=>movie.id);
-         //[...res, favIds, watchIds] = [...res, ...favIds, ...watchIds]
-         res.favIds = favIds;
-         res.watchIds = watchIds;
-         console.log('ressssssssss',res);
-         this.store.dispatch({type:'LOADED_USER_LIST', payload: res});
-         observer.next(null);
-         observer.complete();
-       },
-       (error => {
-         this.store.dispatch({type:'LOAD_ERROR', payload: error});
-       }));
+      if(localStorage.getItem('sessionId')) {
+        return Observable.forkJoin(
+           this._http.get(`${paths.apiUrl}/account/${localStorage.getItem('userId')}/favorite/movies?&api_key=60773f18ef6a7a9ee3d4a640fab964eb&session_id=${localStorage.getItem('sessionId')}`).map((res) => res.json()).catch(this.handleError),
+           this._http.get(`${paths.apiUrl}/account/${localStorage.getItem('userId')}/watchlist/movies?&api_key=60773f18ef6a7a9ee3d4a640fab964eb&session_id=${localStorage.getItem('sessionId')}`).map((res)=> res.json())
+         )
+         .subscribe((res: any) => {
+           let [favs, watchList ] = res;
+           let favIds = favs.results.map(movie=>movie.id);
+           let watchIds = watchList.results.map(movie=>movie.id);
+           res.favIds = favIds;
+           res.watchIds = watchIds;
+           res.userId = localStorage.getItem('userId');
+           this.store.dispatch({type:'LOADED_USER_LIST', payload: res});
+           observer.next(null);
+           observer.complete();
+         },
+         (error => {
+           this.store.dispatch({type:'LOAD_ERROR', payload: error});
+           observer.next(null);
+           observer.complete();
+         }));
+      }
+      else {
+        observer.next(null);
+        observer.complete();
+      }
+
     });
+
   }
 
   // public getUserSelection() { console.log('user state in getting details', this.state);

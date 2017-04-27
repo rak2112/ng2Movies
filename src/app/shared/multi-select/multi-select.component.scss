@@ -63,6 +63,8 @@ $gray: #ccc;
     color: $orange;
     background: transparent;
     outline: 0;
+    box-shadow: none;
+    -webkit-box-shadow: none;
   }
   .btn:active:hover {
     color: $orange;

@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AuthService } from './../auth.service';
-import { IStore, IUserMovies } from './../../shared/dataModels/index';
+import { IStore, IProfile, IUserMovies, IMovie } from './../../shared/dataModels/index';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject'
@@ -20,17 +20,20 @@ import { Subject } from 'rxjs/Subject'
     </div>
   </div>
   <tabs>
-    <tab [tabTitle]='favTitle'>
+    <tab [tabTitle]=" 'Favorites ('+ favMovies.total_results +')' ">
       <app-movie-list
-        [movies]='favMovies'
-        [userView]=true
-        (onEditlist)="onEditlist($event)">
+        userView= 'favorite'
+        [userMovies]= 'userMovies'
+        [movies]='favMovies.results'
+        (onEditlist)="onEditList($event)">
       </app-movie-list>
     </tab>
-    <tab [tabTitle]='watchListTitle'>
+    <tab [tabTitle]=" 'Watch List ('+ watchListMovies.total_results +')' ">
       <app-movie-list
-        [movies]='watchListMovies'
-        (onEditlist)="onEditlist($event)">
+        userView= 'watchList'
+        [userMovies]= 'userMovies'
+        [movies]='watchListMovies.results'
+        (onEditlist)="onEditList($event)">
       </app-movie-list>
     </tab>
   </tabs>
@@ -69,29 +72,21 @@ import { Subject } from 'rxjs/Subject'
     }
   `]
 })
-export class ProfileComponent implements IUserMovies{
+export class ProfileComponent implements IProfile{
   sub: any;
-  favTitle: string;
-  favMovies: any;
-  watchListTitle: string;
-  watchListMovies: any;
-  favTotal: number;
-  watchTotal: number;
-
-  userSelection$: Observable<any>;
+  userMovies: IUserMovies;
+  favMovies: IMovie[];
+  watchListMovies: IMovie[];
   private ngOnDestroy$ = new Subject<void>();
+
   constructor (private authSvc: AuthService, private store: Store<IStore>, private route: ActivatedRoute) {
     this.sub = this.store.select('userMovies')
     .takeUntil(this.ngOnDestroy$)
     .subscribe((state: any) => {
       let {favs, watchList} = state;
-      this.favMovies = favs.results;
-      this.favTitle = `Favorites (${favs.total_results})`;
-      this.favTotal = favs.total_results;
-      this.watchTotal = watchList.total_results;
-      this.watchListMovies = watchList.results;
-      this.watchListTitle = `Watch List (${watchList.total_results})`;
-      console.log('state in store', state);
+      this.userMovies = state;
+      this.favMovies = favs;
+      this.watchListMovies = watchList;
     });
   }
   ngOnInit() {
@@ -99,5 +94,8 @@ export class ProfileComponent implements IUserMovies{
 
   ngOnDestroy(): void {
     this.ngOnDestroy$.next(null);
+  }
+  public onEditList(data) { console.log('data', data)
+    this.authSvc.markFav(data, true);
   }
 }

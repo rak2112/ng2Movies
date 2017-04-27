@@ -26,7 +26,7 @@ export class AllMovies implements IMovies {
   subUserSelection: any;
   filters: any;
   selectedFilters: {};
-
+  userMovies$: any;
   private ngOnDestroy$ = new Subject<void>();
   private userStatus$ = new Subject<void>();
 
@@ -37,8 +37,7 @@ export class AllMovies implements IMovies {
       private location: Location,
       private store: Store<IStore>) {
 
-    this.subUserSelection = store.select('userMovies')
-    .subscribe(state =>{ console.log('usermovies', state)});
+    this.userMovies$ = store.select('userMovies');
     this.sub = store.select('movies')
       .takeUntil(this.ngOnDestroy$)
       .subscribe((state: IMovies) => {
@@ -55,10 +54,6 @@ export class AllMovies implements IMovies {
   }
 
   ngOnInit(): void {
-    console.log('auth', this.authSvc.getAuthByStorage());
-    // if(this.authSvc.getAuthByStorage()) {
-    //   this.authSvc.getUserSelection();
-    // }
     this.currentRoute = this.location.path().split('/')[1];
     this.onPageLoad();
   }
@@ -90,6 +85,6 @@ export class AllMovies implements IMovies {
   }
 
   public onEditlist(data) {
-    this.authSvc.markFav(data);
+    this.authSvc.markFav(data, null);
   }
 }

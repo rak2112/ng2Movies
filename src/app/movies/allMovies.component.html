@@ -8,6 +8,7 @@
     (onRemoveSelection)="onRemoveSelection($event)">
   </app-filters-cmp>
   <app-movie-list
+    [userMovies] = "userMovies$ | async"
     [movies]='movies'
     [genres]='filters.genres'
     [selectedGenres]="selectedFilters.multiSelectors"

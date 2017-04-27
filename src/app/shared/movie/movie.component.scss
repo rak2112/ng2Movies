@@ -52,6 +52,16 @@ $orange: #ff5c00;
       }
     }
   }
+  .user-view {
+    display: block !important;
+    background: none;
+    bottom: 0;
+    position: relative;
+    padding-left: 0;
+    .fa.selected {
+      background: none;
+    }
+  }
   .no-poster {
     background: #eaeaea;
     color: #262626;

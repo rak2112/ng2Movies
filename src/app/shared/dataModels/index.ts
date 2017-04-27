@@ -75,10 +75,16 @@ export interface IUserDetail {
 }
 
 export interface IUserMovies {
+  favIds: Array<number>,
+  watchIds: Array<number>,
+  favs: {},
+  watchList: {}
+}
+
+export interface IProfile {
   sub: any;
-  favTitle: string;
+  userMovies: IUserMovies;
   favMovies: IMovie[];
-  watchListTitle: string;
   watchListMovies: IMovie[];
 }
 

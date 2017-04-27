@@ -5,6 +5,7 @@ import { HttpModule } from '@angular/http';
 import { CommonModule } from '@angular/common';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
+
 import {Store, StoreModule} from '@ngrx/store';
 import { routerReducer, RouterStoreModule } from '@ngrx/router-store';
 
@@ -32,7 +33,7 @@ import {
   ModalTriggerDirective,
   NameInitialsPipe,
 } from './shared/index';
-
+import { UINotification } from './shared/services/ui-notification.service';
 import {MultiSelectComponent } from './shared/multi-select/multi-select.component';
 
 @NgModule({
@@ -63,7 +64,7 @@ import {MultiSelectComponent } from './shared/multi-select/multi-select.componen
     StoreModule.provideStore({movies, movieDetail, searchedMovies, authenticateUser, userMovies}),
   ],
   entryComponents: [ModalComponent],
-  providers: [MovieService, UtilService, AuthService, UserMoviesResolver, AppCompResolver],
+  providers: [MovieService, UtilService, AuthService, UserMoviesResolver, AppCompResolver, UINotification],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

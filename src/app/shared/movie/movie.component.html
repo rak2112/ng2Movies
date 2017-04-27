@@ -17,8 +17,19 @@
     </p>
     <p><a routerLink="/movieDetails/{{movieData.id}}">More Info</a></p>
     <span class="btn btn-sm btn-outline-warning" *ngFor='let genre of movieGenres' [ngClass]="{'selected': genre.selected}">{{genre.name}}</span>
-    <div *ngIf="userView" class="user-view">
-      <a (click)="onMarkAsFav($event, movieData)"><span class="fa fa-heart" [ngClass]="{'selected': isFav}"></span></a>
+
+
+    <div class="user-list user-view" *ngIf="userView === 'favorite'">
+      <a (click)="onMarkAsFav($event, movieData)" title="Remove From List"><span class="fa fa-heart" [ngClass]="{'selected': isFav}"></span></a>
     </div>
+
+    <div class="user-list user-view" *ngIf="userView === 'watchList'">
+      <a href="#" (click)="onAddToList($event, movieData)" title="Remove From List"><span class="fa fa-bookmark" [ngClass]="{'selected': isWatchList}"></span></a>
+    </div>
+
+    <!-- <div *ngIf="userView" class="user-list user-view">
+      <a (click)="onMarkAsFav($event, movieData)"><span class="fa fa-heart" [ngClass]="{'selected': isFav}"></span></a>
+      <a href="#" (click)="onAddToList($event, movieData)"><span class="fa fa-bookmark" [ngClass]="{'selected': isWatchList}"></span></a>
+    </div> -->
   </div>
 </div>

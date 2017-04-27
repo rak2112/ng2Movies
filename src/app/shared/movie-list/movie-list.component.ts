@@ -9,16 +9,17 @@ import { IMovie, IMSelector, IGenre } from './../dataModels/index';
 export class MovieListComponent {
 
   @ViewChild('moviesTop') movieTop: ElementRef;
+  @Input() public userMovies;
   @Input() public movies: IMovie[];
   @Input() public genres: IGenre[];
   @Input() public selectedGenres: IMSelector[];
-  @Input() public userView: boolean;
+  @Input() public userView: string;
 
   @Output() onEditlist: EventEmitter<any> = new EventEmitter<any>();
   constructor(private renderer: Renderer) {}
 
-  ngOnChanges() { console.log('list changessss');
-    this.renderer.setElementProperty(this.movieTop.nativeElement, 'scrollTop', 0);
+  ngOnChanges() { console.log('userMovies', this.userMovies);
+    //this.renderer.setElementProperty(this.movieTop.nativeElement, 'scrollTop', 0);
   }
 
   public onEditFavList(data) :void {

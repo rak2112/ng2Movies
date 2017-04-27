@@ -48,7 +48,7 @@ export class Tabs implements AfterContentInit {
     }
   }
 
-  selectTab(event, tab: Tab){ console.log('evt', event, 'tab', tab)
+  selectTab(event, tab: Tab){
     if(event) {
       event.preventDefault();
     }

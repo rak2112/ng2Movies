@@ -173,20 +173,38 @@ export function authenticateUser(state = auth, action) {
 }
 
 const selectedMovies = {
+  userId: null,
   favIds: [],
   watchIds: [],
-  favs: {},
-  watchList: {}
+  favs: {results:[], total_results: 0},
+  watchList: {results:[], total_results: 0}
 };
 export function userMovies(state= selectedMovies, action) {
   switch (action.type) {
     case 'LOADED_USER_LIST':
       return Object.assign({}, state, {
+        userId: action.payload.userId,
         favs: action.payload[0],
         watchList: action.payload[1],
         favIds: action.payload.favIds,
         watchIds: action.payload.watchIds
       });
+    case 'REMOVE_FROM_FAVS':
+      return Object.assign({}, state, {
+        favs: Object.assign({}, state.favs, {
+          results: state.favs.results.filter((movie, index)=> movie.id !== action.payload),
+          total_results: state.favs.total_results-1
+        })
+    });
+    case 'REMOVE_FROM_WATCHLIST':
+      return Object.assign({}, state, {
+        watchList: Object.assign({}, state.watchList, {
+          results: state.watchList.results.filter((movie, index)=> movie.id !== action.payload),
+          total_results: state.watchList.total_results-1
+        })
+      });
+    case 'NO_USER_LOGGED':
+      return selectedMovies;
     default:
       return state;
 
