@@ -45,8 +45,8 @@ $lightGray: #eaeaea;
   }
 }
 .movies-found {
-  min-height: auto;
-  height: 535px;
+  height: auto;
+  max-height: 535px;
   overflow-y: scroll;
   background: $appBlack;
   width: 100%;

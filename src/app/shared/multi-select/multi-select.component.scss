@@ -15,7 +15,7 @@ $gray: #ccc;
     top: 33px;
     left: 0;
     height: 37px;
-    overflow-y: scroll;
+    overflow-y: auto;
     width: 100%;
     border: 1px solid $orange;
     border-radius: 4px;
@@ -38,6 +38,9 @@ $gray: #ccc;
   .dropdown-menu {
     width: 100%;
     top: 129%;
+    height: auto;
+    max-height: 344px;
+    overflow-y: auto;
   }
 }
 .dropdown-toggle::after{
