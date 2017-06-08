@@ -37,7 +37,6 @@ export class LoginComponent implements ILogin{
     this.userDetail$ = this.store.select('authenticateUser');
   }
   onChange(form): void {
-    console.log('form', form);
     this.authSvc.authenticateUser(form);
   }
   onCancel(): void {

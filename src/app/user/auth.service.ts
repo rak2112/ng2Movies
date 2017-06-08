@@ -6,11 +6,10 @@ import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/filter';
-import 'rxjs/add/Observable/range';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/catch';
-import 'rxjs/add/Observable/forkJoin';
-import 'rxjs/add/Observable/throw';
+import 'rxjs/add/observable/forkJoin';
+import 'rxjs/add/observable/throw';
 import { UINotification } from './../shared/services/ui-notification.service';
 import { paths } from './../shared/services/locationPaths';
 import { IMovie, IMovies, ISelectedFilters } from './../shared/dataModels/index';
@@ -49,7 +48,7 @@ export class AuthService {
       let { session_id } = res.json();
       this._http.get(`${paths.apiUrl}/account${paths.apiKey}&session_id=${session_id}`)
       .map(res => res.json())
-      .subscribe(res=>{
+      .subscribe(res=>{ console.log('ress',res)
         res.sessionId = session_id;
         localStorage.setItem('sessionId', session_id);
         localStorage.setItem('userId', res.id);
@@ -67,7 +66,7 @@ export class AuthService {
     let sessionId = localStorage.getItem('sessionId');
     this._http.get(`${paths.apiUrl}/account${paths.apiKey}&session_id=${sessionId}`)
     .map(res => res.json())
-    .subscribe(res => {
+    .subscribe(res => { console.log('getuser',res);
       res.sessionId = sessionId;
       this.authUser(res);
       this.store.dispatch({type: 'USER_AUTHENTICATED', payload: res});
@@ -159,9 +158,7 @@ export class AuthService {
            let [favs, watchList ] = res;
            let favIds = favs.results.map(movie=>movie.id);
            let watchIds = watchList.results.map(movie=>movie.id);
-           res.favIds = favIds;
-           res.watchIds = watchIds;
-           res.userId = localStorage.getItem('userId');
+           res = [...res, {favIds: favIds}, {watchIds: watchIds}, {userId: localStorage.getItem('userId')}];
            this.store.dispatch({type:'LOADED_USER_LIST', payload: res});
            observer.next(null);
            observer.complete();
@@ -180,17 +177,4 @@ export class AuthService {
     });
 
   }
-
-  // public getUserSelection() { console.log('user state in getting details', this.state);
-  //   Observable.forkJoin(
-  //      this._http.get(`${paths.apiUrl}/account/${this.state.userId}/favorite/movies?&api_key=60773f18ef6a7a9ee3d4a640fab964eb&session_id=${this.state.sessionId}`).map((res) => res.json()).catch(this.handleError),
-  //      this._http.get(`${paths.apiUrl}/account/${this.state.userId}/watchlist/movies?&api_key=60773f18ef6a7a9ee3d4a640fab964eb&session_id=${this.state.sessionId}`).map((res)=> res.json())
-  //    )
-  //    .subscribe((res) => {
-  //      this.store.dispatch({type:'LOADED_USER_LIST', payload: res});
-  //    },
-  //    (error => {
-  //      this.store.dispatch({type:'LOAD_ERROR', payload: error});
-  //    }));
-  // }
 }

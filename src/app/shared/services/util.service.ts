@@ -23,8 +23,8 @@ export class UtilService {
     return movieGenres;
   }
 
-  public toFromDates = () => {
-    let d = new Date();
+  public toFromDates = (d) => {
+    //let d = new Date();
     let dd = d.getDate();
     let mm = d.getMonth()+ 1;
     let yy = d.getFullYear();

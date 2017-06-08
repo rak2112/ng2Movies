@@ -7,22 +7,17 @@ import { ModalComponent } from './modal.component';
 
 describe('ModalComponent', () => {
   let component: ModalComponent;
-  let fixture: ComponentFixture<ModalComponent>;
-
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [ ModalComponent ]
-    })
-    .compileComponents();
-  }));
+  let mockNgbModal, mockSanitizer;
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ModalComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+    mockSanitizer = jasmine.createSpyObj(mockSanitizer, ['bypassSecurityTrustResourceUrl']);
+    mockSanitizer.bypassSecurityTrustResourceUrl.and.returnValue(':someSanitizedUrl');
+    component = new ModalComponent(mockNgbModal, mockSanitizer);
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  it('should create trustedUrl on ngInit', () => {
+    component.hasVideo = 'true';
+    component.ngOnInit();
+    expect(component.trustedUrl).toBe(':someSanitizedUrl');
   });
 });

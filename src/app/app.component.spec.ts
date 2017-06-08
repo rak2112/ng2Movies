@@ -5,33 +5,53 @@
 
 import { TestBed, async } from '@angular/core/testing';
 import { AppComponent } from './app.component';
+import { Observable } from 'rxjs/Rx';
 
 describe('App: Ng2movies', () => {
+  let component: AppComponent,
+      mockAuthSvc, mockStore, mockMovieSvc, mockRouter;
   beforeEach(() => {
-    TestBed.configureTestingModule({
-      declarations: [
-        AppComponent
-      ],
-    });
-    });
+    mockRouter = jasmine.createSpyObj('mockRouter', ['navigate']);
+    mockRouter.navigate.and.returnValue(Observable.of(false));
 
+    mockStore = jasmine.createSpyObj('mockStore', ['select', 'dispatch']);
+    mockStore.dispatch.and.returnValue(Observable.of(false));
 
-  it('should create the app', async(() => {
-    let fixture = TestBed.createComponent(AppComponent);
-    let app = fixture.debugElement.componentInstance;
-    expect(app).toBeTruthy();
-  }));
+    mockAuthSvc = jasmine.createSpyObj('mockAuthSvc', ['getUser', 'logOut']);
+    mockAuthSvc.getUser.and.returnValue(false);
+    mockAuthSvc.logOut.and.returnValue(false);
 
-  it(`should have as title 'app works!'`, async(() => {
-    let fixture = TestBed.createComponent(AppComponent);
-    let app = fixture.debugElement.componentInstance;
-    expect(app.title).toEqual('app works!');
-  }));
+    mockMovieSvc = jasmine.createSpyObj('mockMovieSvc', ['searchMovies']);
+    mockMovieSvc.searchMovies.and.returnValue(false);
+    component = new AppComponent(mockMovieSvc, mockRouter, mockAuthSvc, mockStore);
+    //not integrated test..
+    // TestBed.configureTestingModule({
+    //   declarations: [
+    //     AppComponent
+    //   ],
+    // });
+  });
 
-  it('should render title in a h1 tag', async(() => {
-    let fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
-    let compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelector('h1').textContent).toContain('app works!');
-  }));
+  it(`should call getUser on ngInit`, ()=>{
+    component.ngOnInit();
+    expect(mockAuthSvc.getUser).toHaveBeenCalled();
+  });
+
+  it(`should call searchMovies() when onChange gets called`, ()=>{
+    component.onChange(':someMovie');
+    expect(mockMovieSvc.searchMovies).toHaveBeenCalled();
+  });
+
+  it(`should dispatch an action when resetState() gets called`, ()=>{
+    let action = {type: 'RESET_SEARCH'};
+    component.resetState();
+    expect(mockStore.dispatch).toHaveBeenCalledWith(action);
+  });
+
+  it(`should logOut when onLogOut gets called`, ()=>{
+    let action = ['home'];
+    component.onLogOut(new Event('click'));
+    expect(mockAuthSvc.logOut).toHaveBeenCalled();
+    expect(mockRouter.navigate).toHaveBeenCalledWith(action);
+  });
 });

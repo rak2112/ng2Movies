@@ -7,22 +7,27 @@ import { NavBarComponent } from './nav-bar.component';
 
 describe('NavBarComponent', () => {
   let component: NavBarComponent;
-  let fixture: ComponentFixture<NavBarComponent>;
-
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [ NavBarComponent ]
-    })
-    .compileComponents();
-  }));
+  let mockAuthSvc;
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(NavBarComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+    component = new NavBarComponent(mockAuthSvc);
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  it('should call onChange when onFilterChange gets called', () => {
+    spyOn(component.onChange, 'emit');
+    component.onFilterChange(':name');
+    expect(component.onChange.emit).toHaveBeenCalledWith(':name');
+  });
+
+  it('should call onFocusOut when resetSelection gets called', () => {
+    spyOn(component.onFocusOut, 'emit');
+    component.resetSelection();
+    expect(component.onFocusOut.emit).toHaveBeenCalledWith(null);
+  });
+
+  it('should call logOut when onLogOut gets called', () => {
+    spyOn(component.onLogOut, 'emit');
+    component.logOut(':evt');
+    expect(component.onLogOut.emit).toHaveBeenCalledWith(':evt');
   });
 });

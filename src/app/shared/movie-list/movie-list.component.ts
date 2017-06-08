@@ -18,9 +18,9 @@ export class MovieListComponent {
   @Output() onEditlist: EventEmitter<any> = new EventEmitter<any>();
   constructor(private renderer: Renderer) {}
 
-  ngOnChanges() { console.log('userMovies', this.userMovies);
-    //this.renderer.setElementProperty(this.movieTop.nativeElement, 'scrollTop', 0);
-  }
+  // ngOnChanges() {
+  //   this.renderer.setElementProperty(this.movieTop.nativeElement, 'scrollTop', 0);
+  // }
 
   public onEditFavList(data) :void {
     this.onEditlist.emit(data);

@@ -5,11 +5,10 @@ import { Store } from '@ngrx/store';
 
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/filter';
-import 'rxjs/add/Observable/range';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/catch';
-import 'rxjs/add/Observable/forkJoin';
-import 'rxjs/add/Observable/throw';
+import 'rxjs/add/observable/forkJoin';
+import 'rxjs/add/observable/throw';
 import { paths } from './locationPaths';
 import { UtilService } from './util.service';
 import { IMovie, IMovies, ISelectedFilters } from './../dataModels/index';
@@ -21,12 +20,12 @@ export class MovieService {
   state: any;
   constructor(private _http: Http, private _utilSvc: UtilService, private store: Store<any>) {
     store.select('movies')
-      .subscribe((state: ISelectedFilters) => { console.log('selected', state)
+      .subscribe((state: ISelectedFilters) => {
         this.state = state;
       });
   }
 
-  public getMovies (pageNo, currentRoute) {
+  public getMovies (pageNo: number, currentRoute: string) {
     switch(currentRoute) {
       case 'movies':
         this.getAllMovies(pageNo);
@@ -43,6 +42,8 @@ export class MovieService {
       case 'inCinemas':
         this.getInCinemas(pageNo);
         break;
+      default:
+        this.getAllMovies(pageNo);
     }
   }
 
@@ -62,7 +63,7 @@ export class MovieService {
       }
     })
      .subscribe((res)=>{
-        this.store.dispatch({type: 'TRIDGGER_SEARCH', payload: res});
+        this.store.dispatch({type: 'TRIGGER_SEARCH', payload: res});
      });
   }
 
@@ -169,7 +170,7 @@ export class MovieService {
     }));
   }
   public getLatestMovies(pageNo: number) {
-    let {toDate, fromDate} = this._utilSvc.toFromDates();
+    let {toDate, fromDate} = this._utilSvc.toFromDates(new Date());
     Observable.forkJoin(
       this._http.get(`${paths.apiUrl}/discover/movie?primary_release_date.gte=${toDate}&primary_release_date.lte=${fromDate}&api_key=60773f18ef6a7a9ee3d4a640fab964eb&page=${pageNo}`).map((res) => res.json()).catch(this.handleError),
       this._http.get(`${paths.apiUrl}/genre/movie/list${paths.apiKey}`).map((res)=> res.json())
@@ -209,7 +210,7 @@ export class MovieService {
 
   }
 
-  public dispatchFilters(item, currentRoute, pageNo) : void {
+  public dispatchFilters(item, currentRoute: string, pageNo: number) : void {
     switch(item.type) {
       case 'years':
         this.store.dispatch({type:'FILTER_CHANGED_YEARS', payload: item});

@@ -131,7 +131,7 @@ const moviesFound = {
 
 export function searchedMovies(state = moviesFound, action) {
   switch(action.type) {
-    case 'TRIDGGER_SEARCH':
+    case 'TRIGGER_SEARCH':
       return Object.assign({}, state, {
         movie: action.payload.movie,
         movies: action.payload.movies
@@ -183,11 +183,11 @@ export function userMovies(state= selectedMovies, action) {
   switch (action.type) {
     case 'LOADED_USER_LIST':
       return Object.assign({}, state, {
-        userId: action.payload.userId,
+        userId: action.payload[4].userId,
         favs: action.payload[0],
         watchList: action.payload[1],
-        favIds: action.payload.favIds,
-        watchIds: action.payload.watchIds
+        favIds: action.payload[2].favIds,
+        watchIds: action.payload[3].watchIds
       });
     case 'REMOVE_FROM_FAVS':
       return Object.assign({}, state, {

@@ -12,8 +12,7 @@ export class AppCompResolver implements Resolve<any> {
   constructor(private authSvc: AuthService, private store: Store<any>) {
     //this.userMovies$ = this.store.select('userMovies');
   }
-
-  resolve() { console.log('resolve calling....')
+  resolve() :Observable<any>{
     return this.authSvc.getUserMovies()
     .map(res => res);
   }

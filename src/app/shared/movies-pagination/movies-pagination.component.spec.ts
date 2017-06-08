@@ -14,11 +14,6 @@ describe('MoviesPaginationComponent', () => {
       declarations: [ MoviesPaginationComponent ],
       imports: [NgbModule.forRoot()]
     })
-    // .overrideComponent(MoviesPaginationComponent, { //to override..
-    //   set: {
-    //     template: '<div></div>'
-    //   }
-    // })
     .compileComponents();
   }));
 
@@ -38,7 +33,6 @@ describe('MoviesPaginationComponent', () => {
   });
 
   it(`should emit event when onPageChange gets called on page 2`, () => {
-    //spying on evt emitter...
     spyOn(component.selectedPage, 'emit');
     component.onPageChange(2);
     expect(component.selectedPage.emit).toHaveBeenCalledWith(2);
