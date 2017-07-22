@@ -1,6 +1,8 @@
 <div class="movie-data">
   <div class="img-wrapper">
-    <img *ngIf="movieData.backdrop_path" src="http://image.tmdb.org/t/p/w500/{{movieData.backdrop_path}}" alt="Movie Poster" />
+    <a routerLink="/movieDetails/{{movieData.id}}">
+      <img *ngIf="movieData.backdrop_path" src="http://image.tmdb.org/t/p/w500/{{movieData.backdrop_path}}" alt="Movie Poster" />
+    </a>  
     <div *ngIf="!movieData.backdrop_path" class="no-poster">
       No Poster Available
     </div>
