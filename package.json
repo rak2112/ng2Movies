@@ -23,7 +23,6 @@
     "@angular/platform-browser-dynamic": "^4.1.0-rc.0",
     "@angular/platform-server": "^4.1.0-rc.0",
     "@angular/router": "^4.1.0-rc.0",
-    "@ng-bootstrap/ng-bootstrap": "^1.0.0-alpha.23",
     "@ngrx/core": "^1.2.0",
     "@ngrx/store": "^2.2.1",
     "bootstrap": "^3.3.7",
@@ -31,12 +30,11 @@
     "karma-coverage-istanbul-reporter": "^1.2.1",
     "rxjs": "^5.0.1",
     "ts-helpers": "^1.1.1",
-    "typescript": "^2.2.1",
     "zone.js": "0.8.5"
   },
   "devDependencies": {
     "@angular/cli": "^1.0.0",
-    "@ng-bootstrap/ng-bootstrap": "^1.0.0-alpha.10",
+    "@ng-bootstrap/ng-bootstrap": "1.0.0-beta.4",
     "@ngrx/router-store": "^1.2.5",
     "@ngrx/store": "^2.2.2",
     "@types/jasmine": "^2.5.47",
@@ -55,6 +53,6 @@
     "protractor": "4.0.9",
     "ts-node": "1.2.1",
     "tslint": "3.13.0",
-    "typescript": "~2.0.3"
+    "typescript": "^2.3.4"
   }
 }

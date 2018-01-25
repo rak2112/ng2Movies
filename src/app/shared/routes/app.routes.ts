@@ -4,7 +4,7 @@ import { MovieDetailsComponent } from './../../movie-details/movie-details.compo
 import { Home } from './../../home/home.component';
 import { UserModule } from './../../user/user.module';
 import { AppComponent } from './../../app.component';
-import { AppCompResolver } from './../index';
+import { AppCompResolver } from './../services/appComponent.resolver';
 
 export const appRoutes: Routes = [
   {path: 'home', component: Home},
