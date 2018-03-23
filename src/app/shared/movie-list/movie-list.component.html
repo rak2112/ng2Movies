@@ -2,10 +2,10 @@
   <div *ngFor='let movie of movies' class="col-lg-4 col-md-6 col-sm-6 movie">
     <app-movie
       [userView]='userView'
-      [userMovies]='userMovies'
+      [user]='user'
       [movieData]='movie'
       [genres]='genres'
-      [selectedGenres]='selectedGenres'
+      [selectedGenres]='selectedFilters?.multiSelectors'
       (editFavList)="onEditFavList($event)">
     </app-movie>
   </div>

@@ -4,6 +4,7 @@ $gray: #ccc;
 .filters {
   width: 250px;
   margin: 0 30px 0 11px;
+  position: relative;
   .multi-select{
     width: 300px;
   }
@@ -37,7 +38,7 @@ $gray: #ccc;
   }
   .dropdown-menu {
     width: 100%;
-    top: 129%;
+    top: 119%;
     height: auto;
     max-height: 344px;
     overflow-y: auto;

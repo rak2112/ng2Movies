@@ -8,14 +8,15 @@ import { RouterModule } from '@angular/router';
 
 
 import {Store, StoreModule} from '@ngrx/store';
-import { routerReducer, RouterStoreModule } from '@ngrx/router-store';
+import { routerReducer } from '@ngrx/router-store';
 
-import { LoginComponent } from './login/login.component';
+import { LoginContainer } from './login/login.container';
 import { LoginFormComponent } from './login/loginForm.component';
+import { ProfileComponentContainer } from './profile/profile.container';
 import { ProfileComponent } from './profile/profile.component';
 import { userRoutes } from './user.routes';
 import { AuthService } from './auth.service';
-import {movies, movieDetail, searchedMovies, authenticateUser} from './../reducers/movies.reducer';
+//import {movies, movieDetail, searchedMovies, authenticateUser} from './../reducers/movies.reducer';
 
 import { SharedModule } from './../shared/common.module';
 
@@ -25,9 +26,10 @@ import { SharedModule } from './../shared/common.module';
 
 @NgModule({
   declarations: [
-    LoginComponent,
-    LoginFormComponent,
-    ProfileComponent
+    LoginContainer,
+		LoginFormComponent,
+		ProfileComponentContainer,
+		ProfileComponent
   ],
   imports: [
     //BrowserModule,

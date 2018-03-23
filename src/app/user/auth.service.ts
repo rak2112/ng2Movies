@@ -1,24 +1,16 @@
 import { Injectable } from '@angular/core';
-import { Http, Response, Headers, RequestOptions} from '@angular/http';
+import { Response, Headers, RequestOptions} from '@angular/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, ObservableInput } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
 import { Subject } from 'rxjs/Subject';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/mergeMap';
-import 'rxjs/add/operator/filter';
-import 'rxjs/add/operator/do';
-import 'rxjs/add/operator/catch';
-import 'rxjs/add/observable/forkJoin';
-import 'rxjs/add/observable/throw';
-import { UINotification } from './../shared/services/ui-notification.service';
-import { paths } from './../shared/services/locationPaths';
-import { IMovie, IMovies, ISelectedFilters } from './../shared/dataModels/index';
+import { of } from 'rxjs/observable/of';
+import { forkJoin } from "rxjs/observable/forkJoin";
+import { map, mergeMap, switchMap, catchError } from 'rxjs/operators';
+import { UINotification } from '../core/services/index';
+import { paths } from '../core/services/locationPaths';
+import { IUser } from '../core/models';
 
-interface AppStore {
-}
-interface Input {
-  request_token: string
-};
 
 @Injectable()
 export class AuthService {
@@ -27,53 +19,48 @@ export class AuthService {
   currentUser: boolean = false;
   userCredentials: {id: null, sessionId: null};
   some$: Observable<any>;
-  constructor(private _http: Http, private store: Store<AppStore>, private uiNotifications: UINotification) {
-    store.select('authenticateUser')
-      .subscribe((state: any) => {
-        this.state = state;
-      });
+	constructor(private http: HttpClient, private uiNotifications: UINotification, private store: Store<any>) {
   }
 
-  public authenticateUser(data) {
-    this.some$ = this._http.get(`${paths.apiUrl}/authentication/token/new${paths.apiKey}`)
-    .map(res => res.json())
-    .mergeMap((res) : ObservableInput<any> => {
-      let {request_token} = res;
-      return this._http.get(`${paths.apiUrl}/authentication/token/validate_with_login${paths.apiKey}&username=${data.userName}&password=${data.password}&request_token=${res.request_token}`)
-      .map(res => res.json())
-      .mergeMap((res) => this._http.get(`${paths.apiUrl}/authentication/session/new${paths.apiKey}&request_token=${res.request_token}`))
-    });
-    this.some$
-    .subscribe(res => {
-      let { session_id } = res.json();
-      this._http.get(`${paths.apiUrl}/account${paths.apiKey}&session_id=${session_id}`)
-      .map(res => res.json())
-      .subscribe(res=>{ console.log('ress',res)
-        res.sessionId = session_id;
-        localStorage.setItem('sessionId', session_id);
-        localStorage.setItem('userId', res.id);
-        localStorage.setItem('userName', res.username);
-        this.store.dispatch({type: 'USER_AUTHENTICATED', payload: res});
-        this.authUser(res);
-      },
-      (error => { //TODO: pass the generic error handler..
-        console.log('err', error);
-      }));
-    });
+	public getNewToken(data) {
+		return this.http.get(`${paths.apiUrl}/authentication/token/new${paths.apiKey}`)
+		.pipe(
+			mergeMap(({request_token}: {request_token: string}) : ObservableInput<any> => {
+				return this.http.get(`${paths.apiUrl}/authentication/token/validate_with_login${paths.apiKey}&username=${data.userName}&password=${data.password}&request_token=${request_token}`)
+				.pipe(
+					mergeMap((res) => this.http.get(`${paths.apiUrl}/authentication/session/new${paths.apiKey}&request_token=${request_token}`))
+				)
+			})
+		)
+	}
+  public authenticateUser(sessionId) { console.log('saesssion', sessionId)
+			return this.http.get(`${paths.apiUrl}/account${paths.apiKey}&session_id=${sessionId}`)
+			.pipe(
+				mergeMap((res : {id: null, username: string, name: string}): Observable<any> => {
+					localStorage.setItem('user', JSON.stringify({
+						sessionId: sessionId,
+						id: res.id,
+						name: res.name,
+						username: res.username
+					}));
+					return of({...res, sessionId});
+				})
+			)
   }
 
   public getUser() {
-    let sessionId = localStorage.getItem('sessionId');
-    this._http.get(`${paths.apiUrl}/account${paths.apiKey}&session_id=${sessionId}`)
-    .map(res => res.json())
-    .subscribe(res => { console.log('getuser',res);
-      res.sessionId = sessionId;
-      this.authUser(res);
-      this.store.dispatch({type: 'USER_AUTHENTICATED', payload: res});
-    },
-    error=> {
-      this.store.dispatch({type: 'USER_LOGGED_OUT'});
-    });
+		const user = localStorage.getItem('user');
+		return (user) ? JSON.parse(user) : null;
+    // let sessionId = localStorage.getItem('sessionId');
+    // this.http.get(`${paths.apiUrl}/account${paths.apiKey}&session_id=${sessionId}`)
+    // .subscribe(res => { console.log('getuser',res);
+    //   res.sessionId = sessionId;
+    //   this.authUser(res);
+    //   this.store.dispatch({type: 'USER_AUTHENTICATED', payload: res});
+    // },
+    // error=> {
+    //   this.store.dispatch({type: 'USER_LOGGED_OUT'});
+    // });
   }
   public authUser(userDetail): void {
     this.currentUser = true;
@@ -92,10 +79,27 @@ export class AuthService {
   }
   public getAuthByStorage(): string {
     return localStorage.getItem('sessionId');
-  }
-  public handleError(error: Response) {
-    return Observable.throw(error);
-  }
+	}
+	
+	editFavorites({userId, sessionId, id, favorite}) {
+		const httpOptions = {
+			headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+		};
+    return this.http.post(
+      (`${paths.apiUrl}/account/${userId}/favorite${paths.apiKey}&session_id=${sessionId}`),
+			JSON.stringify({media_type: 'movie', media_id: id, favorite: favorite}),
+			httpOptions
+    );
+    // .subscribe(res => { console.log('resss in service....', res)
+    //   //this.generateNotification(movieData);
+    //   if(favorite) {
+    //     this.store.dispatch({type:'ADD_TO_FAVS', payload: id});
+    //   }
+    //   else {
+    //     this.store.dispatch({type:'REMOVE_FROM_FAVS', payload: id});
+    //   }
+    // });
+	}
 
   public markFav(movieData, userView): void {
     if(!this.state.sessionId) {
@@ -114,12 +118,12 @@ export class AuthService {
     }
     let headers = new Headers({'Content-Type': 'application/json'});
     let options = new RequestOptions({headers});
-    this._http.post(
+    this.http.post(
       (`${paths.apiUrl}/account/${this.state.userId}/${url}${paths.apiKey}&session_id=${this.state.sessionId}`),
-      JSON.stringify(data),
+      //JSON.stringify(data),
       options
     )
-    .map(res => res.json())
+    //.map(res => res.json())
     .subscribe(res => {
       this.generateNotification(movieData);
       if(!isWatchItem && userView) {
@@ -144,15 +148,25 @@ export class AuthService {
     else if(data.watchList && !data.includeInWatch) {
       this.uiNotifications.success(...['Success', 'Removed from Watchlist']);
     }
-  }
+	}
+	
+	public getGenres() {
+		return this.http.get(`${paths.apiUrl}/genre/movie/list${paths.apiKey}`);
+	}
 
+	public getMovies({userId, sessionId}) {
+		return forkJoin(
+			this.http.get(`${paths.apiUrl}/account/${userId}/favorite/movies?&api_key=60773f18ef6a7a9ee3d4a640fab964eb&session_id=${sessionId}`),
+			this.http.get(`${paths.apiUrl}/account/${userId}/watchlist/movies?&api_key=60773f18ef6a7a9ee3d4a640fab964eb&session_id=${sessionId}`),
+		);
+	}
   public getUserMovies() {
     let dataFetched$ = new Observable();
     return Observable.create(observer => {
       if(localStorage.getItem('sessionId')) {
-        return Observable.forkJoin(
-           this._http.get(`${paths.apiUrl}/account/${localStorage.getItem('userId')}/favorite/movies?&api_key=60773f18ef6a7a9ee3d4a640fab964eb&session_id=${localStorage.getItem('sessionId')}`).map((res) => res.json()).catch(this.handleError),
-           this._http.get(`${paths.apiUrl}/account/${localStorage.getItem('userId')}/watchlist/movies?&api_key=60773f18ef6a7a9ee3d4a640fab964eb&session_id=${localStorage.getItem('sessionId')}`).map((res)=> res.json())
+        return forkJoin(
+           this.http.get(`${paths.apiUrl}/account/${localStorage.getItem('userId')}/favorite/movies?&api_key=60773f18ef6a7a9ee3d4a640fab964eb&session_id=${localStorage.getItem('sessionId')}`),
+           this.http.get(`${paths.apiUrl}/account/${localStorage.getItem('userId')}/watchlist/movies?&api_key=60773f18ef6a7a9ee3d4a640fab964eb&session_id=${localStorage.getItem('sessionId')}`)
          )
          .subscribe((res: any) => {
            let [favs, watchList ] = res;

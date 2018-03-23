@@ -8,45 +8,46 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { ActivatedRoute, Params }   from '@angular/router';
-//import { Tab, Tabs, MovieListComponent, MovieComponent, } from './index';
+
+import { ModalComponent } from './modal/modal.component';
+import { MultiSelectComponent } from './multi-select/multi-select.component';
+
 import {
+	ErrorComponent,
+  LoaderComponent,
   Tab,
   Tabs,
   MovieComponent,
   MovieListComponent,
-  MoviesPaginationComponent
+	MoviesPaginationComponent,
+	FilterComponent,
+	ModalTriggerDirective,
+	NameInitialsPipe
 } from './index';
 
-// import {
-//
-// } from './shared/index';
 
+const DECLARATIONS = [
+	ErrorComponent,
+	FilterComponent,
+  LoaderComponent,
+  Tab,
+  Tabs,
+  MovieComponent,
+  MovieListComponent,
+	MoviesPaginationComponent,
+	ModalComponent,
+	MultiSelectComponent,
+	ModalTriggerDirective,
+	NameInitialsPipe
+];
 @NgModule({
-  declarations: [
-    Tab,
-    Tabs,
-    MovieComponent,
-    MovieListComponent,
-    MoviesPaginationComponent
-  ],
+  declarations: [...DECLARATIONS],
   imports: [
-    //BrowserModule,
     CommonModule,
-    // FormsModule,
     HttpModule,
     RouterModule,
     NgbModule.forRoot(),
-    //StoreModule.provideStore({router: routerReducer, movies, movieDetail, searchedMovies, authenticateUser}),
   ],
-  exports:[
-    // BrowserModule,
-    // CommonModule,
-    // FormsModule,
-    Tab,
-    Tabs,
-    MovieComponent,
-    MovieListComponent,
-    MoviesPaginationComponent
-  ]
+  exports:[...DECLARATIONS]
 })
 export class SharedModule { }

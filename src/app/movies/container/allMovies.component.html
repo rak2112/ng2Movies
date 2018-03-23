@@ -1,5 +1,5 @@
-<app-loader *ngIf="isFetching"></app-loader>
-<app-error-laoder *ngIf="hasError" [errorStatus]='errorStatus'></app-error-laoder>
+<!-- <app-loader *ngIf="isFetching"></app-loader>
+<app-error-laoder *ngIf="hasError" [errorStatus]='errorStatus'></app-error-laoder> -->
 <div *ngIf="!isFetching && !hasError" class="movies-app">
   <app-filters-cmp
     [filters]="filters"
@@ -9,9 +9,7 @@
   </app-filters-cmp>
   <app-movie-list
     [userMovies] = "userMovies$ | async"
-    [movies]='movies'
-    [genres]='filters.genres'
-    [selectedGenres]="selectedFilters.multiSelectors"
+    [movies]='allMovies$ | async'
     (onEditlist)="onEditlist($event)">
   </app-movie-list>
   <div class="footer">

@@ -1,11 +1,11 @@
 import { Component, OnInit, OnDestroy, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute, Params }   from '@angular/router';
 import { Location }                 from '@angular/common';
-import { MovieService } from './../shared/services/movie.service';
-import { IStore, IDetails } from './../shared/dataModels/index';
 import { Store } from '@ngrx/store';
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/takeUntil';
+import { IDetails, IStore } from '../core/models/index';
+import { MovieService } from '../core/services/movie.service';
 
 @Component({
   selector: 'app-movie-details',
@@ -26,15 +26,15 @@ export class MovieDetailsComponent implements IDetails {
     private _movieSvc: MovieService,
     private route: ActivatedRoute,
     private store:Store<IStore>) {
-      store.select('movieDetail')
-        .takeUntil(this.ngOnDestroy$)
-        .subscribe((state: IDetails) => {
-          let {isFetching, hasError, errorDetails, details} = state;
-          this.isFetching = isFetching;
-          this.hasError = hasError;
-          this.errorDetails = errorDetails;
-          this.details = details;
-        });
+      // store.select('movieDetail')
+      //   .takeUntil(this.ngOnDestroy$)
+      //   .subscribe((state: IDetails) => {
+      //     let {isFetching, hasError, errorDetails, details} = state;
+      //     this.isFetching = isFetching;
+      //     this.hasError = hasError;
+      //     this.errorDetails = errorDetails;
+      //     this.details = details;
+      //   });
     }
 
   ngOnInit(): void {

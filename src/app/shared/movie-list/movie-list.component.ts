@@ -1,6 +1,6 @@
 import { Component, OnInit, OnChanges, Input, Output, EventEmitter, ViewChild, Renderer, ElementRef } from '@angular/core';
 import { MovieComponent } from './../movie/movie.component';
-import { IMovie, IMSelector, IGenre } from './../dataModels/index';
+import { IMovie, IGenre, IMSelector } from '../../core/models/index';
 @Component({
   selector: 'app-movie-list',
   templateUrl: './movie-list.component.html',
@@ -9,18 +9,17 @@ import { IMovie, IMSelector, IGenre } from './../dataModels/index';
 export class MovieListComponent {
 
   @ViewChild('moviesTop') movieTop: ElementRef;
-  @Input() public userMovies;
-  @Input() public movies: IMovie[];
-  @Input() public genres: IGenre[];
-  @Input() public selectedGenres: IMSelector[];
-  @Input() public userView: string;
+  @Input() user;
+  @Input() movies: IMovie[];
+	@Input() userView: string;
+	@Input() genres = [];
+	@Input() selectedFilters = [];
+
 
   @Output() onEditlist: EventEmitter<any> = new EventEmitter<any>();
-  constructor(private renderer: Renderer) {}
-
-  // ngOnChanges() {
-  //   this.renderer.setElementProperty(this.movieTop.nativeElement, 'scrollTop', 0);
-  // }
+  constructor(private renderer: Renderer) {
+		//this.selectedGenres = movies.filters.
+	}
 
   public onEditFavList(data) :void {
     this.onEditlist.emit(data);

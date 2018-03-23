@@ -1,8 +1,10 @@
-import { LoginComponent } from './login/login.component';
-import { ProfileComponent } from './profile/profile.component';
-import { UserMoviesResolver } from './userMoviesResolver';
+import { LoginContainer } from './login/login.container';
+import { ProfileComponentContainer } from './profile/profile.container';
+import { UserMoviesExistsGuard } from '../core/guards';
 
 export const userRoutes = [
-  {path: 'login', component: LoginComponent},
-  {path: 'profile', component: ProfileComponent, resolve: {userMovies: UserMoviesResolver}}
+  {path: 'login', component: LoginContainer},
+  {path: 'profile', component: ProfileComponentContainer, canActivate: [
+		UserMoviesExistsGuard
+	]}
 ];

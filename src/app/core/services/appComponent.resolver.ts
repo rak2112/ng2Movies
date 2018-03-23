@@ -5,12 +5,14 @@ import { Observable, ObservableInput } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
 import 'rxjs/add/operator/take';
 
+import { State } from '../reducers';
+import { getMovies, getUser } from './../selectors';
 @Injectable()
 
 export class AppCompResolver implements Resolve<any> {
   userMovies$: Observable<any>;
-  constructor(private authSvc: AuthService, private store: Store<any>) {
-    //this.userMovies$ = this.store.select('userMovies');
+  constructor(private authSvc: AuthService, private store: Store<State>) {
+    this.userMovies$ = this.store.select(getUser);
   }
   resolve() :Observable<any>{
     return this.authSvc.getUserMovies()

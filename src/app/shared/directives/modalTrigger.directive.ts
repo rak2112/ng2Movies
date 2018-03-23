@@ -1,7 +1,7 @@
 import { Directive, OnInit, ElementRef, Input, HostListener } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import {NgbModal, NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
-import { ModalComponent } from './../modal/modal.component';
+import { ModalComponent } from '../modal/modal.component';
 
 @Directive({
   selector: '[modal-trigger]'

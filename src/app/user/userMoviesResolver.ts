@@ -14,7 +14,7 @@ export class UserMoviesResolver implements Resolve<any> {
   }
 
   resolve() {
-    return this.authSvc.getUserMovies()
-    .map(res => res);
+    // return this.authSvc.getUserMovies()
+    // .map(res => res);
   }
 }

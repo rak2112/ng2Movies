@@ -22,11 +22,11 @@
     </ul>
     <ul class=" nav user-profile">
       <li class="nav-item">
-        <a *ngIf="!authSvc.hasAuth()" class="nav-link" routerLinkActive="active" [routerLink]="['user/login']">Login</a>
-        <a *ngIf="authSvc.hasAuth()" class="nav-link" routerLinkActive="active" [routerLink]="['user/profile']">Welcome <span class="user">{{userDetail?.userName | nameInitials}}</span></a>
+        <a *ngIf="!userDetail.hasUserCredentials" class="nav-link" routerLinkActive="active" [routerLink]="['user/login']">Login</a>
+        <a *ngIf="userDetail.hasUserCredentials" class="nav-link" routerLinkActive="active" [routerLink]="['user/profile']">Welcome <span class="user">{{userDetail?.userName | nameInitials}}</span></a>
       </li>
       <li class="nav-item">
-        <a *ngIf="authSvc.hasAuth()" href="" class="nav-link" (click)="logOut($event)">Log out</a>
+        <a *ngIf="userDetail.hasUserCredentials" href="" class="nav-link" (click)="logOut($event)">Log out</a>
       </li>
     </ul>
   </nav>

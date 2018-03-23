@@ -1,19 +1,15 @@
 import { Component } from '@angular/core';
-import { MovieService } from './shared/services/movie.service';
 import { AuthService } from './user/auth.service';
-import { ISearch, IStore } from './shared/dataModels/index';
 import { Store } from '@ngrx/store';
 import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs/Observable';
 
+import { State } from './core/reducers';
+import { getMovies, getUser, apiStatus, getSearchedMovies } from './core/selectors';
+import * as moviesEntities from './core/actions';
+
 import { Router, NavigationEnd }   from '@angular/router';
-
-
-interface IUserDetail {
-  hasAuth: boolean,
-  sessionId: string,
-  userId: string
-}
+import { ISearch, IApi, IUser } from './core/models/index';
 
 @Component({
   selector: 'app-root',
@@ -23,26 +19,35 @@ interface IUserDetail {
 
 export class AppComponent{
   moviesFound$: Observable<ISearch>;
-  userDetail$: Observable<ISearch>;
+	userDetail$: Observable<IUser>;
+	apiStatus$: Observable<IApi>;
   constructor(
-      private movieService: MovieService,
+      //private movieService: MovieService,
       private router: Router,
       private authSvc: AuthService,
-      private store: Store<IStore>) {
-        this.moviesFound$ = this.store.select('searchedMovies');
-        this.userDetail$ = this.store.select('authenticateUser');
+      private store: Store<State>) {
+				this.apiStatus$ = store.select(apiStatus);
+				this.userDetail$ = store.select(getUser);
+        this.moviesFound$ = store.select(getSearchedMovies);
+        
   }
 
   ngOnInit() {
-    this.authSvc.getUser();
+		const user = this.authSvc.getUser(); //TODO: will comeback to revist this approach...
+		console.log('userExisits', user);
+		if(user) {
+			this.store.dispatch(new moviesEntities.UserLoginSuccess(user));
+		}
   }
 
-  onChange(movieName: string): void {
-    this.movieService.searchMovies(movieName);
+	onChange(movie: string): void { console.log('movcieeeeee to search', movie);
+		if(movie) {
+			this.store.dispatch(new moviesEntities.TriggerSearch(movie))
+		}
   }
 
   resetState(): void {
-    this.store.dispatch({type: 'RESET_SEARCH'});
+    this.store.dispatch(new moviesEntities.ResetSearch());
   }
   onLogOut(event): void {
     event.preventDefault();

@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { IUserDetail } from './../../shared/dataModels/index';
+import { IUser } from '../../core/models/index';
 
 
 
@@ -42,7 +42,7 @@ import { IUserDetail } from './../../shared/dataModels/index';
 
 export class LoginFormComponent {
 
-  @Input() userDetail : IUserDetail;
+  @Input() userDetail : IUser;
   @Output() onChange: EventEmitter<any> = new EventEmitter();
   @Output() cancel: EventEmitter<any> = new EventEmitter();
   @Output() onAuth: EventEmitter<any> = new EventEmitter();
@@ -54,7 +54,7 @@ export class LoginFormComponent {
     this.cancel.emit(null);
   }
   ngOnChanges(): void {
-    if(this.userDetail.hasAuth) {
+    if(this.userDetail.hasUserCredentials) {
       this.onAuth.emit();
     }
   }
